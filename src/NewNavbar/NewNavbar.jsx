@@ -235,10 +235,59 @@ function NewNavbar() {
       alert("Select size to start creating room");
       audio2.play();
     } else if (title === "Enter Room") {
-      dispatch({
-        type: "SetStates",
-        payload: { enterRoom: true, sel: "Select size here", modalShow: true },
-      });
+      const canEnterRoom = async () => {
+        const docSnap = await getDoc(
+          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
+        );
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const dataFromLocal =
+            typeof window !== "undefined" && window.localStorage
+              ? localStorage.getItem("player")
+              : null;
+          const playerInfo = JSON.parse(dataFromLocal);
+          if (playerInfo && data?.players[playerInfo] === 2) {
+            alert("Per day Limit reached!");
+            dispatch({
+              type: "SetStates",
+              payload: { playerFixed: "2" },
+            });
+            updateDocState({ playerRequesting: "2" });
+            return;
+          } else if (playerInfo) {
+            //add playerInfo or token or addplayer in db for this day
+            await updateDoc(
+              doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
+              {
+                players: {
+                  ...data.players,
+                  [playerInfo]:
+                    (data?.players[playerInfo]
+                      ? data?.players[playerInfo]
+                      : 0) + 1,
+                },
+              }
+            );
+          } else if (!playerInfo) {
+            alert("Please signIn");
+            return;
+          }
+          if (Object.keys(data?.players).length < 3) {
+            dispatch({
+              type: "SetStates",
+              payload: { enterRoom: true, sel: "Select size here" },
+            });
+          } else {
+            alert(
+              "Visit next day as max games played/day or number of players/day limit exceeded!"
+            );
+          }
+          // console.log("Document data:", docSnap.data());
+        }
+      };
+      canEnterRoom();
+
       audio2.play();
     } else {
       let alertForHome = setTimeout(() => {
