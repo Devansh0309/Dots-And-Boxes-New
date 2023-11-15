@@ -273,16 +273,15 @@ function NewNavbar() {
             ? localStorage.getItem("player")
             : null;
         const playerInfo = JSON.parse(dataFromLocal);
-        const docSnap = await getDoc(
-          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
-        );
+        const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
         if (docSnap.exists()) {
           const data = docSnap.data();
           updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
             players: {
               ...data.players,
-              [playerInfo]: data?.players[playerInfo] + 1,
+              [playerInfo]:
+                (data?.players[playerInfo] ? data?.players[playerInfo] : 0) + 1,
             },
           });
         }
@@ -552,22 +551,24 @@ function NewNavbar() {
                           payload: { playerFixed: "2" },
                         });
                         updateDocState({ playerRequesting: "2" });
-                        return
-                      } else if (
-                        playerInfo &&
-                        !data?.players[playerInfo] &&
-                        !data?.players[playerInfo] === 0
-                      ) {
+                        return;
+                      } else if (playerInfo) {
                         //add playerInfo or token or addplayer in db for this day
                         await updateDoc(
                           doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
                           {
-                            players: { ...data.players, [playerInfo]: 0 },
+                            players: {
+                              ...data.players,
+                              [playerInfo]:
+                                (data?.players[playerInfo]
+                                  ? data?.players[playerInfo]
+                                  : 0) + 1,
+                            },
                           }
                         );
                       } else if (!playerInfo) {
                         alert("Please signIn");
-                        return
+                        return;
                       }
                       if (Object.keys(data?.players).length < 3) {
                         dispatch({
