@@ -5,7 +5,6 @@ import { auth, db } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-
 function Auth() {
   const navigate = useNavigate();
   const signIn = () => {
