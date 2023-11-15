@@ -22,7 +22,7 @@ function Auth() {
         if (docSnap.exists()) {
           const data = docSnap.data();
           await updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
-            players: { ...data.players, [player]: 0 },
+            players: { ...data.players, [player]: 1 },
           });
         }
         //save player.uid something in place of JSON.stringify(player) in localStorageSetItem
