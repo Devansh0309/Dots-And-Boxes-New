@@ -663,7 +663,6 @@ function NewNavbar() {
         <List sx={{ color: "white" }}>
           {navItems.map((ele) => (
             <>
-
               {
                 (state.player1Live &&
                   state.playerEnteredRoom &&
