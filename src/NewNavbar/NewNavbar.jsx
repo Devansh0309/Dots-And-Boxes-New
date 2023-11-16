@@ -21,6 +21,8 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import { BsDoorOpenFill } from "react-icons/bs";
+import { SlLogout } from "react-icons/sl";
 import "./NewNavbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
@@ -103,9 +105,9 @@ function NewNavbar() {
     { title: "How to Play?", icon: <LightbulbIcon /> },
     { title: "SignIn", icon: <LogoutIcon /> },
     { title: "Options", icon: <SettingsIcon /> },
-    { title: "Create Room", icon: <HomeIcon /> },
-    { title: "Enter Room", icon: <HomeIcon /> },
-    { title: "Exit Online Room", icon: <LogoutIcon /> },
+    { title: "Create Room", icon: <BsDoorOpenFill /> },
+    { title: "Enter Room", icon: <BsDoorOpenFill /> },
+    { title: "Exit Online Room", icon: <SlLogout /> },
   ];
 
   const handleNavClicks = (title) => {
@@ -231,9 +233,7 @@ function NewNavbar() {
       audio2.play();
     } else if (title === "Enter Room") {
       const canEnterRoom = async () => {
-        const docSnap = await getDoc(
-          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
-        );
+        const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
         if (docSnap.exists()) {
           const data = docSnap.data();
@@ -250,8 +250,7 @@ function NewNavbar() {
             });
             updateDocState({ playerRequesting: "2" });
             return;
-          } 
-          else if (!playerInfo) {
+          } else if (!playerInfo) {
             alert("Please signIn");
             return;
           }
@@ -583,8 +582,7 @@ function NewNavbar() {
                         });
                         updateDocState({ playerRequesting: "2" });
                         return;
-                      } 
-                      else if (!playerInfo) {
+                      } else if (!playerInfo) {
                         alert("Please signIn");
                         return;
                       }
@@ -664,17 +662,29 @@ function NewNavbar() {
         </DrawerHeader>
         <List sx={{ color: "white" }}>
           {navItems.map((ele) => (
-            <ListItem key={ele.title} disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  handleNavClicks(ele.title);
-                  audio1.play();
-                }}
-              >
-                <ListItemIcon sx={{ color: "white" }}>{ele.icon}</ListItemIcon>
-                <ListItemText primary={ele.title} />
-              </ListItemButton>
-            </ListItem>
+            <>
+
+              {
+                (state.player1Live &&
+                  state.playerEnteredRoom &&
+                  !state.won &&
+                  (ele.title === "New Game" || ele.title === "SignIn") ) || ((state.enterRoom  || state.roomId) &&
+                    (ele.title === "Create Room" ||
+                      ele.title === "Enter Room") )?null:<ListItem key={ele.title} disablePadding>
+                  <ListItemButton
+                    onClick={() => {
+                      handleNavClicks(ele.title);
+                      audio1.play();
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "white" }}>
+                      {ele.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={ele.title} />
+                  </ListItemButton>
+                </ListItem>
+              }
+            </>
           ))}
         </List>
       </Drawer>
