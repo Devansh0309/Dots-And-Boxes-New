@@ -671,6 +671,15 @@ function Contexts(props) {
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+      if (
+        data?.number_of_games_played_per_day === 3 ||
+        Object.keys(data?.players).length === 3
+      ) {
+        alert(
+          "Visit next day as max games played/day or number of players/day limit exceeded!"
+        );
+        return false;
+      }
       const dataFromLocal =
         typeof window !== "undefined" && window.localStorage
           ? localStorage.getItem("player")
@@ -680,25 +689,15 @@ function Contexts(props) {
         alert("Per day Limit reached!")
         return false
       }
-      else if(playerInfo && !data?.players[playerInfo] && !data?.players[playerInfo]===0){
+      else if(playerInfo && !data?.players[playerInfo]){
         //add playerInfo or token or addplayer in db for this day
         await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
-          players:{...data.players,[playerInfo]:0}
+          players:{...data.players,[playerInfo]:1}
         })
       }
       else if(!playerInfo){
         alert("Please signIn")
         return false
-      }
-
-      if (
-        data?.number_of_games_played_per_day >= 3 ||
-        Object.keys(data?.players).length >= 3
-      ) {
-        alert(
-          "Visit next day as max games played/day or number of players/day limit exceeded!"
-        );
-        return false;
       }
       // console.log("Document data:", docSnap.data());
     }

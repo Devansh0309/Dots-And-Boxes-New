@@ -619,7 +619,7 @@ function NewNavbar() {
                         alert("Please signIn");
                         return;
                       }
-                      if (Object.keys(data?.players).length < 3) {
+                      if (Object.keys(data?.players).length <= 3) {
                         dispatch({
                           type: "SetStates",
                           payload: { enterRoom: true, sel: "Select size here" },
