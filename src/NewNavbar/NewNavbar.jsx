@@ -96,7 +96,6 @@ function NewNavbar() {
 
   const { state, dispatch, updateDocState, checkDocs } =
     useContext(GridContext);
-  const [roomCreated, setRoomCreated] = useState(false);
 
   const navItems = [
     { title: "Home", icon: <HomeIcon /> },
@@ -116,7 +115,6 @@ function NewNavbar() {
         state.playerRequesting !== state.playerFixed
       ) {
         console.log("new game clicked", "line 122");
-        setRoomCreated(false);
         const temp = async () => {
           await deleteDoc(
             doc(db, "users", state.roomId || state.enterRoomId)
@@ -183,10 +181,8 @@ function NewNavbar() {
       navigate("/");
     } else if (title === "Exit Online Room") {
       if (state.playerEnteredRoom) {
-        setRoomCreated(false);
         const temp = async () => {
           await updateDocState({
-            // sel: "Select size here",
             [state.playerFixed === "2"
               ? "playerEnteredRoom"
               : "player1Live"]: false,
@@ -219,7 +215,6 @@ function NewNavbar() {
         };
         temp();
       }
-      // window.close();
     } else if (title === "Options") {
       dispatch({ type: "SetStates", payload: { modalShow: true } });
     } else if (title === "Create Room") {
@@ -323,7 +318,7 @@ function NewNavbar() {
         }
       };
       updateAnotherDocState();
-      setRoomCreated(true);
+      // setRoomCreated(true);
     });
   };
 
@@ -511,7 +506,7 @@ function NewNavbar() {
               </>
             )}
             {state.roomId ? (
-              roomCreated ? (
+              state.sel !== "Select size here" ? (
                 <div>
                   {/* <span>{roomId} </span> */}
                   <Button
