@@ -672,8 +672,8 @@ function Contexts(props) {
     if (docSnap.exists()) {
       const data = docSnap.data();
       if (
-        data?.number_of_games_played_per_day === 3 ||
-        Object.keys(data?.players).length === 3
+        data?.number_of_games_played_per_day === 70 ||
+        Object.keys(data?.players).length === 12
       ) {
         alert(
           "Visit next day as max games played/day or number of players/day limit exceeded!"
@@ -685,16 +685,10 @@ function Contexts(props) {
           ? localStorage.getItem("player")
           : null;
       const playerInfo = JSON.parse(dataFromLocal);
-      if(playerInfo && data?.players[playerInfo]===2){
+      if(playerInfo && data?.players[playerInfo]===11){
         alert("Per day Limit reached!")
         return false
       }
-      // else if(playerInfo && !data?.players[playerInfo]){
-      //   //add playerInfo or token or addplayer in db for this day
-      //   await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
-      //     players:{...data.players,[playerInfo]:0}
-      //   })
-      // }
       else if(!playerInfo){
         alert("Please signIn")
         return false

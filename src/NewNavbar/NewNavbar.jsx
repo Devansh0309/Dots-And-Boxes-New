@@ -247,7 +247,7 @@ function NewNavbar() {
               ? localStorage.getItem("player")
               : null;
           const playerInfo = JSON.parse(dataFromLocal);
-          if (playerInfo && data?.players[playerInfo] === 2) {
+          if (playerInfo && data?.players[playerInfo] === 11) {
             alert("Per day Limit reached!");
             dispatch({
               type: "SetStates",
@@ -260,7 +260,7 @@ function NewNavbar() {
             alert("Please signIn");
             return;
           }
-          if (Object.keys(data?.players).length < 3) {
+          if (Object.keys(data?.players).length < 12) {
             dispatch({
               type: "SetStates",
               payload: { enterRoom: true, sel: "Select size here" },
@@ -580,7 +580,7 @@ function NewNavbar() {
                           ? localStorage.getItem("player")
                           : null;
                       const playerInfo = JSON.parse(dataFromLocal);
-                      if (playerInfo && data?.players[playerInfo] === 2) {
+                      if (playerInfo && data?.players[playerInfo] === 11) {
                         alert("Per day Limit reached!");
                         dispatch({
                           type: "SetStates",
@@ -593,7 +593,7 @@ function NewNavbar() {
                         alert("Please signIn");
                         return;
                       }
-                      if (Object.keys(data?.players).length <= 3) {
+                      if (Object.keys(data?.players).length < 12) {
                         dispatch({
                           type: "SetStates",
                           payload: { enterRoom: true, sel: "Select size here" },
