@@ -255,21 +255,23 @@ function NewNavbar() {
             });
             updateDocState({ playerRequesting: "2" });
             return;
-          } else if (playerInfo) {
-            //add playerInfo or token or addplayer in db for this day
-            await updateDoc(
-              doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
-              {
-                players: {
-                  ...data.players,
-                  [playerInfo]:
-                    (data?.players[playerInfo]
-                      ? data?.players[playerInfo]
-                      : 0) + 1,
-                },
-              }
-            );
-          } else if (!playerInfo) {
+          } 
+          // else if (playerInfo) {
+          //   //add playerInfo or token or addplayer in db for this day
+          //   await updateDoc(
+          //     doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
+          //     {
+          //       players: {
+          //         ...data.players,
+          //         [playerInfo]:
+          //           (data?.players[playerInfo]
+          //             ? data?.players[playerInfo]
+          //             : 0) + 1,
+          //       },
+          //     }
+          //   );
+          // } 
+          else if (!playerInfo) {
             alert("Please signIn");
             return;
           }
@@ -601,21 +603,23 @@ function NewNavbar() {
                         });
                         updateDocState({ playerRequesting: "2" });
                         return;
-                      } else if (playerInfo) {
-                        //add playerInfo or token or addplayer in db for this day
-                        await updateDoc(
-                          doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
-                          {
-                            players: {
-                              ...data.players,
-                              [playerInfo]:
-                                (data?.players[playerInfo]
-                                  ? data?.players[playerInfo]
-                                  : 0) + 1,
-                            },
-                          }
-                        );
-                      } else if (!playerInfo) {
+                      } 
+                      // else if (playerInfo) {
+                      //   //add playerInfo or token or addplayer in db for this day
+                      //   await updateDoc(
+                      //     doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"),
+                      //     {
+                      //       players: {
+                      //         ...data.players,
+                      //         [playerInfo]:
+                      //           (data?.players[playerInfo]
+                      //             ? data?.players[playerInfo]
+                      //             : 0) + 1,
+                      //       },
+                      //     }
+                      //   );
+                      // } 
+                      else if (!playerInfo) {
                         alert("Please signIn");
                         return;
                       }

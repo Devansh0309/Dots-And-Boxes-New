@@ -253,17 +253,20 @@ function SquareGrid() {
           onSubmit={(e) => {
             e.preventDefault();
             console.log("line 314 newnavbar", state.enterRoomId);
-            dispatch({
-              type: "SetStates",
-              payload: {
-                playerEnteredRoom: true,
-                playerFixed: "2",
-                modalShow: true,
-              },
-            });
+            ;
             updateDocState({
               playerEnteredRoom: true,
-            });
+            }).then(()=>{
+              updateAnotherDocState()
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  playerEnteredRoom: true,
+                  playerFixed: "2",
+                  modalShow: true,
+                },
+              })
+            })
             const updateAnotherDocState = async () => {
               const dataFromLocal =
                 typeof window !== "undefined" && window.localStorage
@@ -281,12 +284,12 @@ function SquareGrid() {
                     data.number_of_games_played_per_day + 1,
                   players: {
                     ...data.players,
-                    [playerInfo]: data?.players[playerInfo] + 1,
+                    [playerInfo]: (data?.players[playerInfo]?data?.players[playerInfo]:0) + 1,
                   },
                 });
               }
             };
-            updateAnotherDocState();
+           ;
           }}
         >
           <input

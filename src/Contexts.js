@@ -689,12 +689,12 @@ function Contexts(props) {
         alert("Per day Limit reached!")
         return false
       }
-      else if(playerInfo && !data?.players[playerInfo]){
-        //add playerInfo or token or addplayer in db for this day
-        await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
-          players:{...data.players,[playerInfo]:1}
-        })
-      }
+      // else if(playerInfo && !data?.players[playerInfo]){
+      //   //add playerInfo or token or addplayer in db for this day
+      //   await updateDoc(doc(db,"games", "XhxrYcgKoKl9eLoCVFl2"),{
+      //     players:{...data.players,[playerInfo]:0}
+      //   })
+      // }
       else if(!playerInfo){
         alert("Please signIn")
         return false
