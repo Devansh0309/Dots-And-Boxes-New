@@ -24,6 +24,7 @@ function SquareGrid() {
   const InitialRender1 = useRef(true); //Initial Render 1 for initial render of first useEffect and so on for others useEffect
   const InitialRender2 = useRef(true);
   const InitialRender0 = useRef(true);
+  const InitialRender3 = useRef(true);
   const dataFetched = useRef(false);
   const navigate = useNavigate();
   let timeOut;
@@ -93,6 +94,129 @@ function SquareGrid() {
     }
   }, [state.horizontalButtons, state.verticalButtons, state.playerEnteredRoom]);
 
+  useEffect(()=>{
+    let playerInfo;
+    const updateAnotherDocState = async () => {
+      console.log("line 270, inside updateAnotherDocState()");
+      if (!state.player2Id) {
+        const dataFromLocal =
+          typeof window !== "undefined" && window.localStorage
+            ? localStorage.getItem("player")
+            : null;
+        playerInfo = JSON.parse(dataFromLocal);
+        console.log("line 278", playerInfo, state.player1Id);
+        if (playerInfo === state.player1Id) {
+          console.log("line 279", "Cannot playwith oneself!");
+          alert("line 280 Cannot playwith oneself!");
+          console.log("line 281", "updated playerEnteredRoom in db");
+          dispatch({
+            type: "SetStates",
+            payload: {
+              won: "",
+              sel: "Select size here",
+              player1Live: false,
+              playerEnteredRoom: false,
+              roomId: "",
+              enterRoomId: "",
+              enterRoom: false,
+              horizontalButtons: [],
+              verticalButtons: [],
+              squaresColors: [],
+              numberOfSquares: 0,
+              player1Score: 0,
+              player2Score: 0,
+              player: "1",
+              playerFixed: "1",
+              changesAdded: false,
+              playerRequesting: "",
+              player1Id: "",
+              player2Id: "",
+            },
+          });
+          navigate("/signIn");
+          return false;
+        }
+        dispatch({
+          type: "SetStates",
+          payload: {
+            player2Id: playerInfo,
+          },
+        });
+      } else if (
+        state.player2Id &&
+        state.player2Id === state.player1Id
+      ) {
+        console.log("line 319", "Cannot playwith oneself!");
+        alert("line 320, Cannot playwith oneself!");
+        dispatch({
+          type: "SetStates",
+          payload: {
+            won: "",
+            sel: "Select size here",
+            player1Live: false,
+            playerEnteredRoom: false,
+            roomId: "",
+            enterRoomId: "",
+            enterRoom: false,
+            horizontalButtons: [],
+            verticalButtons: [],
+            squaresColors: [],
+            numberOfSquares: 0,
+            player1Score: 0,
+            player2Score: 0,
+            player: "1",
+            playerFixed: "1",
+            changesAdded: false,
+            playerRequesting: "",
+            player1Id: "",
+            player2Id: "",
+          },
+        });
+        navigate("/signIn");
+        return false;
+      }
+      const docSnap = await getDoc(
+        doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
+      );
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
+          number_of_games_played_per_day:
+            data.number_of_games_played_per_day + 1,
+          players: {
+            ...data.players,
+            [playerInfo]:
+              (data?.players[playerInfo]
+                ? data?.players[playerInfo]
+                : 0) + 1,
+          },
+        });
+      }
+      return true;
+    };
+    if (!state.Routed && InitialRender1.current) {
+      InitialRender1.current = false;
+    } else if (!state.Routed && !InitialRender1.current) {
+      if (state.playerEnteredRoom && state.player1Id && state.playerFixed === "2") {
+        console.log("line 369")
+        updateAnotherDocState().then((res) => {
+          console.log("line 373", res);
+          if (res) {
+            updateDocState({player2Id:state.player2Id?state.player2Id:playerInfo}).then(()=>{
+              dispatch({
+                type: "SetStates",
+                payload: {
+                  modalShow: true,
+                },
+              });
+            })
+          }
+        });
+      }
+    }
+  },[state.playerEnteredRoom,state.player1Id])
+
   useEffect(() => {
     if (
       (state.roomId || state.enterRoomId) &&
@@ -109,11 +233,11 @@ function SquareGrid() {
   useEffect(() => {
     console.log(3);
     console.log("line 229: state.sel", state.sel);
-    if (!state.Routed && InitialRender1.current) {
-      InitialRender1.current = false;
+    if (!state.Routed && InitialRender2.current) {
+      InitialRender2.current = false;
     } else if (
       !state.Routed &&
-      !InitialRender1.current &&
+      !InitialRender2.current &&
       state.numberOfSquares > 0 &&
       state.numberOfSquares === state.row * state.col
     ) {
@@ -158,16 +282,17 @@ function SquareGrid() {
 
   useEffect(() => {
     console.log(4);
-    if (!state.Routed && InitialRender2.current) {
-      InitialRender2.current = false;
-    } else if (state.Routed && InitialRender2.current) {
+    if (!state.Routed && InitialRender3.current) {
+      InitialRender3.current = false;
+    } else if (state.Routed && InitialRender3.current) {
       dispatch({ type: "SetStates", payload: { Routed: false } });
       InitialRender0.current = false;
       InitialRender1.current = false;
       InitialRender2.current = false;
+      InitialRender3.current = false;
     } else if (
       !state.Routed &&
-      !InitialRender2.current &&
+      !InitialRender3.current &&
       state.won &&
       state.start
     ) {
@@ -178,7 +303,7 @@ function SquareGrid() {
         console.log("dispatching on line 299");
         dispatch({ type: "SetStates", payload: { won: "" } });
       }
-    } else if (!state.Routed && !InitialRender2.current && state.won) {
+    } else if (!state.Routed && !InitialRender3.current && state.won) {
       if (state.playerEnteredRoom) {
         timeOut = setTimeout(() => {
           const temp = async () => {
@@ -237,7 +362,7 @@ function SquareGrid() {
           right: "0",
         }}
       />
-      {state.sel !== "Select size here" && !state.won ? (
+      {state.sel !== "Select size here" && !state.won && !state.playerEnteredRoom && !state.player1Live ? (
         <GridComponent />
       ) : state.sel === "Select size here" && state.won ? (
         <div>
@@ -246,50 +371,26 @@ function SquareGrid() {
         </div>
       ) : state.sel !== "Select size here" && state.won ? (
         ""
-      ) : state?.playerEnteredRoom ? (
+      ) : (state?.playerEnteredRoom && state.player1Id && state.player2Id && state.player1Id!==state.player2Id)? (
         <GridComponent />
       ) : state.enterRoom ? (
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("line 314 newnavbar", state.enterRoomId);
-            ;
+            console.log("line 255 newnavbar", state.enterRoomId);
             updateDocState({
               playerEnteredRoom: true,
-            }).then(()=>{
-              updateAnotherDocState()
+            }).then(() => {
+              console.log("line 260", "dispatched");
               dispatch({
                 type: "SetStates",
                 payload: {
                   playerEnteredRoom: true,
-                  playerFixed: "2",
-                  modalShow: true,
+                  playerFixed: "2"
                 },
-              })
-            })
-            const updateAnotherDocState = async () => {
-              const dataFromLocal =
-                typeof window !== "undefined" && window.localStorage
-                  ? localStorage.getItem("player")
-                  : null;
-              const playerInfo = JSON.parse(dataFromLocal);
-              const docSnap = await getDoc(
-                doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
-              );
-
-              if (docSnap.exists()) {
-                const data = docSnap.data();
-                updateDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"), {
-                  number_of_games_played_per_day:
-                    data.number_of_games_played_per_day + 1,
-                  players: {
-                    ...data.players,
-                    [playerInfo]: (data?.players[playerInfo]?data?.players[playerInfo]:0) + 1,
-                  },
-                });
-              }
-            };
-           ;
+              });
+              console.log("line 266",state.player1Id)
+            });
           }}
         >
           <input

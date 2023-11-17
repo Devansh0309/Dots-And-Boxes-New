@@ -46,6 +46,8 @@ const initialState = {
   playerRequesting: states ? states.playerRequesting : "",
   changeGame: states ? states.changeGame : false,
   player1Live: states ? states.player1Live : false,
+  player1Id: states ? states.player1Id : "",
+  player2Id: states ? states.player2Id : ""
 };
 function reducer(state, action) {
   // console.log("line 34 in context",state)

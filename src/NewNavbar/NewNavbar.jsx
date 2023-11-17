@@ -284,7 +284,14 @@ function NewNavbar() {
 
   const createRoom = async (enterRoomId, tempObj) => {
     console.log("line 173", "room created");
-
+    let playerInfo
+    if(!state.player1Id){
+      const dataFromLocal =
+          typeof window !== "undefined" && window.localStorage
+            ? localStorage.getItem("player")
+            : null;
+        playerInfo = JSON.parse(dataFromLocal);
+    }
     await setDoc(doc(db, "users", enterRoomId), {
       ...tempObj,
       numberOfSquares: 0,
@@ -296,6 +303,7 @@ function NewNavbar() {
       playerEnteredRoom: false,
       player1Live: true,
       player1Name: state.player1Name,
+      player1Id: playerInfo || state.player1Id
     }).then(() => {
       const updateAnotherDocState = async () => {
         const dataFromLocal =
