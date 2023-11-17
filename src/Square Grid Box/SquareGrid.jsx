@@ -97,18 +97,18 @@ function SquareGrid() {
   useEffect(()=>{
     let playerInfo;
     const updateAnotherDocState = async () => {
-      console.log("line 270, inside updateAnotherDocState()");
+      // console.log("line 270, inside updateAnotherDocState()");
       if (!state.player2Id) {
         const dataFromLocal =
           typeof window !== "undefined" && window.localStorage
             ? localStorage.getItem("player")
             : null;
         playerInfo = JSON.parse(dataFromLocal);
-        console.log("line 278", playerInfo, state.player1Id);
+        // console.log("line 278", playerInfo, state.player1Id);
         if (playerInfo === state.player1Id) {
-          console.log("line 279", "Cannot playwith oneself!");
-          alert("line 280 Cannot playwith oneself!");
-          console.log("line 281", "updated playerEnteredRoom in db");
+          // console.log("line 279", "Cannot playwith oneself!");
+          alert("Cannot playwith oneself!");
+          // console.log("line 281", "updated playerEnteredRoom in db");
           dispatch({
             type: "SetStates",
             payload: {
@@ -146,8 +146,8 @@ function SquareGrid() {
         state.player2Id &&
         state.player2Id === state.player1Id
       ) {
-        console.log("line 319", "Cannot playwith oneself!");
-        alert("line 320, Cannot playwith oneself!");
+        // console.log("line 319", "Cannot playwith oneself!");
+        alert("Cannot playwith oneself!");
         dispatch({
           type: "SetStates",
           payload: {

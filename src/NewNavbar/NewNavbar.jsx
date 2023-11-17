@@ -283,7 +283,7 @@ function NewNavbar() {
   };
 
   const createRoom = async (enterRoomId, tempObj) => {
-    console.log("line 173", "room created");
+    // console.log("line 173", "room created");
     let playerInfo
     if(!state.player1Id){
       const dataFromLocal =
