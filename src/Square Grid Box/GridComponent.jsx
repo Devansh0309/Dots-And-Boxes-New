@@ -91,7 +91,7 @@ function GridComponent() {
           );
         }}
       >
-        {state?.Box.map((item) =>
+        {state?.Box?.map((item) =>
           item % (state?.col + 1) === state?.col &&
           item < state?.row * state?.col + state?.row + state?.col ? (
             <div className="twobox" style={{ flexDirection: "column" }} key={item}>

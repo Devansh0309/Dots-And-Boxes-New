@@ -68,13 +68,13 @@ function SquareGrid() {
             ) {
               console.log("line 111", targetDoc, typeof targetDoc);
               dispatch({
-                type: "SetStates",
+                type: "SetStates",changesAdded: true ,
                 payload: { ...targetDoc, changesAdded: true },
               });
             } else if (
               typeOfChange.current === "modified" ||
-              (typeOfChange.current === typeOfChange.current) === "removed"
-            ) {
+              typeOfChange.current === "removed")
+            {
               console.log("line 119", targetDoc, typeof targetDoc);
               // setTypeOfChange("")
               typeOfChange.current = "";
