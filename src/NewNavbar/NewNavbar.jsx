@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { GridContext } from "../Contexts";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
+// import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -34,56 +34,127 @@ import { Button } from "@mui/material";
 import clipboardCopy from "clipboard-copy";
 import { doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
+import MuiDrawer from "@mui/material/Drawer";
 
-const drawerWidth = 190;
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  })
-);
+// const drawerWidth = 190;
+
+// const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+//   ({ theme, open }) => ({
+//     flexGrow: 1,
+//     padding: theme.spacing(3),
+//     transition: theme.transitions.create("margin", {
+//       easing: theme.transitions.easing.sharp,
+//       duration: theme.transitions.duration.leavingScreen,
+//     }),
+//     marginLeft: `-${drawerWidth}px`,
+//     ...(open && {
+//       transition: theme.transitions.create("margin", {
+//         easing: theme.transitions.easing.easeOut,
+//         duration: theme.transitions.duration.enteringScreen,
+//       }),
+//       marginLeft: 0,
+//     }),
+//   })
+// );
+
+// const AppBar = styled(MuiAppBar, {
+//   shouldForwardProp: (prop) => prop !== "open",
+// })(({ theme, open }) => ({
+//   transition: theme.transitions.create(["margin", "width"], {
+//     easing: theme.transitions.easing.sharp,
+//     duration: theme.transitions.duration.leavingScreen,
+//   }),
+//   ...(open && {
+//     width: `calc(100% - ${drawerWidth}px)`,
+//     marginLeft: `${drawerWidth}px`,
+//     transition: theme.transitions.create(["margin", "width"], {
+//       easing: theme.transitions.easing.easeOut,
+//       duration: theme.transitions.duration.enteringScreen,
+//     }),
+//   }),
+// }));
+
+// const DrawerHeader = styled("div")(({ theme }) => ({
+//   display: "flex",
+//   alignItems: "center",
+//   padding: theme.spacing(0, 1),
+//   // necessary for content to be below app bar
+//   ...theme.mixins.toolbar,
+//   justifyContent: "flex-end",
+// }));
+
+//new drawer functions
+
+const drawerWidth = 240;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
+    marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
 }));
 
 function NewNavbar() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const audio1 = new Audio(ButtonSound1);
   const audio2 = new Audio(ButtonSound2);
 
@@ -284,13 +355,13 @@ function NewNavbar() {
 
   const createRoom = async (enterRoomId, tempObj) => {
     // console.log("line 173", "room created");
-    let playerInfo
-    if(!state.player1Id){
+    let playerInfo;
+    if (!state.player1Id) {
       const dataFromLocal =
-          typeof window !== "undefined" && window.localStorage
-            ? localStorage.getItem("player")
-            : null;
-        playerInfo = JSON.parse(dataFromLocal);
+        typeof window !== "undefined" && window.localStorage
+          ? localStorage.getItem("player")
+          : null;
+      playerInfo = JSON.parse(dataFromLocal);
     }
     await setDoc(doc(db, "users", enterRoomId), {
       ...tempObj,
@@ -303,7 +374,7 @@ function NewNavbar() {
       playerEnteredRoom: false,
       player1Live: true,
       player1Name: state.player1Name,
-      player1Id: playerInfo || state.player1Id
+      player1Id: playerInfo || state.player1Id,
     }).then(() => {
       const updateAnotherDocState = async () => {
         const dataFromLocal =
@@ -372,22 +443,24 @@ function NewNavbar() {
       Box: arr,
     };
   };
+
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: "#4A00E0" }} open={open}>
         <Toolbar>
-          <IconButton
+          {/* <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onMouseOver={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            sx={{
+              marginRight: 5,
+              ...(open && { display: "none" }),
+            }}
           >
-            <button className="button-29" role="button">
-              <MenuIcon />
-            </button>
-          </IconButton>
+            <MenuIcon />
+          </IconButton> */}
 
           {/* //dot and box name code here  */}
 
@@ -631,20 +704,7 @@ function NewNavbar() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          color: "white",
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
+      <Drawer variant="permanent" open={open} onMouseEnter={handleDrawerOpen}   onMouseLeave={handleDrawerClose}>
         <img
           src={background}
           style={{
@@ -659,25 +719,19 @@ function NewNavbar() {
             opacity: "0.85",
           }}
         />
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon sx={{ color: "white" }} />
-            ) : (
-              <ChevronRightIcon sx={{ color: "white" }} />
-            )}
-          </IconButton>
+        <DrawerHeader >
         </DrawerHeader>
         <List sx={{ color: "white" }}>
           {navItems.map((ele) => (
-            <>
-              {
-                (state.player1Live &&
-                  state.playerEnteredRoom &&
-                  !state.won &&
-                  (ele.title === "New Game" || ele.title === "SignIn") ) || ((state.enterRoom  || state.roomId) &&
-                    (ele.title === "Create Room" ||
-                      ele.title === "Enter Room") )?null:<ListItem key={ele.title} disablePadding>
+            <div key={ele.title}>
+              {(state.player1Live &&
+                state.playerEnteredRoom &&
+                !state.won &&
+                (ele.title === "New Game" || ele.title === "SignIn")) ||
+              ((state.enterRoom || state.roomId) &&
+                (ele.title === "Create Room" ||
+                  ele.title === "Enter Room")) ? null : (
+                <ListItem key={ele.title} disablePadding>
                   <ListItemButton
                     onClick={() => {
                       handleNavClicks(ele.title);
@@ -690,14 +744,11 @@ function NewNavbar() {
                     <ListItemText primary={ele.title} />
                   </ListItemButton>
                 </ListItem>
-              }
-            </>
+              )}
+            </div>
           ))}
         </List>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
     </Box>
   );
 }

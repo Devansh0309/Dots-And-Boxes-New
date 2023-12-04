@@ -8,6 +8,7 @@ import VerticallyCenteredModal from './StartDialog/index'
 import NewNavbar2 from "./NewNavbar/AboutNavbar";
 import NewNavbar from "./NewNavbar/NewNavbar";
 import Auth from "./Auth/index"
+import SimpleBottomNavigation from "./NewNavbar/BottomNavigation";
 
 function App() {
   
@@ -20,6 +21,7 @@ function App() {
          <NewNavbar/>
          <VerticallyCenteredModal/>
          <SquareGrid />
+         {/* <SimpleBottomNavigation/> */}
         </Contexts>}/>
       <Route path="/aboutgame" 
       element={<Contexts>

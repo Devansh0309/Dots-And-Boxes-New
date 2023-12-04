@@ -49,6 +49,7 @@ const initialState = {
   player1Id: states ? states.player1Id : "",
   player2Id: states ? states.player2Id : ""
 };
+
 function reducer(state, action) {
   // console.log("line 34 in context",state)
   switch (action.type) {
@@ -68,6 +69,7 @@ function reducer(state, action) {
       throw new Error();
   }
 }
+
 function Contexts(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const audio3 = new Audio(SquareSound);
