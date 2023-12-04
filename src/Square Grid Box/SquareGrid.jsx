@@ -15,7 +15,6 @@ import {
 import { db } from "../firebaseConfig";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import SimpleBottomNavigation from "../NewNavbar/BottomNavigation";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
@@ -363,7 +362,7 @@ function SquareGrid() {
           right: "0",
         }}
       />
-      {state.sel !== "Select size here" && !state.won && !state.playerEnteredRoom && !state.player1Live ? (
+      {state.sel !== "Select size here" && !state.won && !state.player1Live && !state.playerEnteredRoom ? (
         <GridComponent />
       ) : state.sel === "Select size here" && state.won ? (
         <div>
@@ -475,7 +474,6 @@ function SquareGrid() {
         </div>
       )}
       {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}
-      {/* <SimpleBottomNavigation/> */}
     </div>
   );
 }

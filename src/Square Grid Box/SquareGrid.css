@@ -2,6 +2,9 @@
 .Appe {
   text-align: center;
   margin: auto;
+  /* padding: auto; */
+  padding-left: 12px;
+  /* margin-top: 60px; */
   justify-content: center;
   position:relative;
   height:calc(100vh - 70px);
@@ -37,8 +40,8 @@
   display:grid;
   --height:500px;
   --width:600px;
-  --square_height:80px;
-    --square_width:80px;
+  --square_height:55px;
+    --square_width:55px;
   justify-content:flex-start;
   margin: auto;
   padding: 0.3125rem;
@@ -180,8 +183,8 @@
     .gridBox{
       --height:200px;
       --width:300px;
-      --square_height:80px;
-      --square_width:80px;
+      --square_height:55px;
+      --square_width:55px;
     }
   }
   @media all and (min-width:375px) and (max-width:424px){ 
@@ -189,8 +192,8 @@
     .gridBox{
       --height:270px;
       --width:370px;
-      --square_height:80px;
-      --square_width:80px;
+      --square_height:55px;
+      --square_width:55px;
     }
   }
   
@@ -199,8 +202,8 @@
     .gridBox{
       --height:300px;
       --width:400px;
-      --square_height:80px;
-      --square_width:80px;
+      --square_height:55px;
+      --square_width:55px;
     }
   }
   
@@ -210,8 +213,8 @@
       --height:501px;
 
       --width:550px;
-      --square_height:80px;
-      --square_width:80px;
+      --square_height:55px;
+      --square_width:55px;
     }
   }
   /* .App{

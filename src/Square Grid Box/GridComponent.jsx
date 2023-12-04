@@ -29,7 +29,7 @@ function GridComponent() {
         id="grid-box"
         style={{
           //for fixing grid size-->
-          //calc(${state?.row+1} * var(--square_height)=(state?.row+1)*80, where var(--square_height)=80px
+          //calc(${state?.row+1} * var(--square_height)=(state?.row+1)*80, where var(--square_height)=55px
           height:
             state?.gridWidth >
               document
@@ -83,7 +83,7 @@ function GridComponent() {
           const elem = document.getElementById("#grid-box");
           console.log(
             "calculation width:",
-            (state?.col + 1) * 80,
+            (state?.col + 1) * 55,
             " client width ",
             document
               .getElementsByClassName("main-section")[0]

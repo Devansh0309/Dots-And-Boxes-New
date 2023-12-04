@@ -3,16 +3,11 @@ import { useContext, useState } from "react";
 import { GridContext } from "../Contexts";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-// import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -22,6 +17,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import { BsDoorOpenFill } from "react-icons/bs";
+import { MdMeetingRoom } from "react-icons/md";
 import { SlLogout } from "react-icons/sl";
 import "./NewNavbar.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -36,52 +32,6 @@ import { doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import MuiDrawer from "@mui/material/Drawer";
 
-// const drawerWidth = 190;
-
-// const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-//   ({ theme, open }) => ({
-//     flexGrow: 1,
-//     padding: theme.spacing(3),
-//     transition: theme.transitions.create("margin", {
-//       easing: theme.transitions.easing.sharp,
-//       duration: theme.transitions.duration.leavingScreen,
-//     }),
-//     marginLeft: `-${drawerWidth}px`,
-//     ...(open && {
-//       transition: theme.transitions.create("margin", {
-//         easing: theme.transitions.easing.easeOut,
-//         duration: theme.transitions.duration.enteringScreen,
-//       }),
-//       marginLeft: 0,
-//     }),
-//   })
-// );
-
-// const AppBar = styled(MuiAppBar, {
-//   shouldForwardProp: (prop) => prop !== "open",
-// })(({ theme, open }) => ({
-//   transition: theme.transitions.create(["margin", "width"], {
-//     easing: theme.transitions.easing.sharp,
-//     duration: theme.transitions.duration.leavingScreen,
-//   }),
-//   ...(open && {
-//     width: `calc(100% - ${drawerWidth}px)`,
-//     marginLeft: `${drawerWidth}px`,
-//     transition: theme.transitions.create(["margin", "width"], {
-//       easing: theme.transitions.easing.easeOut,
-//       duration: theme.transitions.duration.enteringScreen,
-//     }),
-//   }),
-// }));
-
-// const DrawerHeader = styled("div")(({ theme }) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   padding: theme.spacing(0, 1),
-//   // necessary for content to be below app bar
-//   ...theme.mixins.toolbar,
-//   justifyContent: "flex-end",
-// }));
 
 //new drawer functions
 
@@ -102,9 +52,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(5)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(6)} + 1px)`,
   },
 });
 
@@ -177,7 +127,7 @@ function NewNavbar() {
     { title: "SignIn", icon: <LogoutIcon /> },
     { title: "Options", icon: <SettingsIcon /> },
     { title: "Create Room", icon: <BsDoorOpenFill /> },
-    { title: "Enter Room", icon: <BsDoorOpenFill /> },
+    { title: "Enter Room", icon: <MdMeetingRoom />},
     { title: "Exit Online Room", icon: <SlLogout /> },
   ];
 
@@ -445,22 +395,10 @@ function NewNavbar() {
   };
 
   return (
-    <Box sx={{ display: "flex", minWidth: "100vw", height: "65px" }}>
+    <Box sx={{ display: "flex", minWidth: "100vw", height: "60px" }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: "#4A00E0" }} open={open}>
         <Toolbar>
-          {/* <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onMouseOver={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton> */}
 
           {/* //dot and box name code here  */}
 
@@ -529,8 +467,8 @@ function NewNavbar() {
                             col: col,
                             ...obj,
                             sel: selectValue,
-                            gridWidth: 80 * (col + 1),
-                            gridHeight: 80 * (row + 1),
+                            gridWidth: 55 * (col + 1),
+                            gridHeight: 55 * (row + 1),
                           },
                         });
                         if (state.roomId) {
