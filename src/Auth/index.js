@@ -1,12 +1,15 @@
 import React from "react";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import "./index.css";
-import { auth, db } from "../firebaseConfig";
+import { auth } from "../firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import background from "../background.jpg"
+import { useContext } from "react";
+import { GridContext } from "../Contexts";
 
 function Auth() {
   const navigate = useNavigate();
+  const { state, dispatch } = useContext(GridContext);
   const signIn = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
@@ -26,9 +29,16 @@ function Auth() {
         //   });
         // }
         //save player.uid something in place of JSON.stringify(player) in localStorageSetItem
-        localStorage.setItem("player", JSON.stringify(player));
+        // localStorage.setItem("player", JSON.stringify(player));
+        dispatch({
+          type: "SetStates",
+          payload: {
+            playerSignedIn: player
+          },
+        });
         
         navigate("/");
+        alert("Signed In!")
       })
       .catch((error) => {
         // Handle Errors here.
@@ -45,6 +55,19 @@ function Auth() {
 
   return (
     <div className="auth-container">
+      <img
+        src={background}
+        style={{
+          width: "100vw",
+          height: "100%",
+          position: "absolute",
+          zIndex: "-10",
+          top: "-13px",
+          bottom: "0",
+          left: "0",
+          right: "0",
+        }}
+      />
       <h1>Welcome</h1>
       <h2>Sign In</h2>
       <br />

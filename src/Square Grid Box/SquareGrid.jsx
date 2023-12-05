@@ -68,13 +68,13 @@ function SquareGrid() {
             ) {
               console.log("line 111", targetDoc, typeof targetDoc);
               dispatch({
-                type: "SetStates",changesAdded: true ,
+                type: "SetStates",
+                changesAdded: true,
                 payload: { ...targetDoc, changesAdded: true },
               });
             } else if (
-              typeOfChange.current === "modified" ||
-              typeOfChange.current === "removed")
-            {
+              typeOfChange.current === "modified"
+            ) {
               console.log("line 119", targetDoc, typeof targetDoc);
               // setTypeOfChange("")
               typeOfChange.current = "";
@@ -94,16 +94,16 @@ function SquareGrid() {
     }
   }, [state.horizontalButtons, state.verticalButtons, state.playerEnteredRoom]);
 
-  useEffect(()=>{
+  useEffect(() => {
     let playerInfo;
     const updateAnotherDocState = async () => {
       // console.log("line 270, inside updateAnotherDocState()");
       if (!state.player2Id) {
-        const dataFromLocal =
-          typeof window !== "undefined" && window.localStorage
-            ? localStorage.getItem("player")
-            : null;
-        playerInfo = JSON.parse(dataFromLocal);
+        // const dataFromLocal =
+        //   typeof window !== "undefined" && window.localStorage
+        //     ? localStorage.getItem("player")
+        //     : null;
+        playerInfo = state?.playerSignedIn;
         // console.log("line 278", playerInfo, state.player1Id);
         if (playerInfo === state.player1Id) {
           // console.log("line 279", "Cannot playwith oneself!");
@@ -142,10 +142,7 @@ function SquareGrid() {
             player2Id: playerInfo,
           },
         });
-      } else if (
-        state.player2Id &&
-        state.player2Id === state.player1Id
-      ) {
+      } else if (state.player2Id && state.player2Id === state.player1Id) {
         // console.log("line 319", "Cannot playwith oneself!");
         alert("Cannot playwith oneself!");
         dispatch({
@@ -175,9 +172,7 @@ function SquareGrid() {
         navigate("/signIn");
         return false;
       }
-      const docSnap = await getDoc(
-        doc(db, "games", "XhxrYcgKoKl9eLoCVFl2")
-      );
+      const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
       if (docSnap.exists()) {
         const data = docSnap.data();
@@ -187,9 +182,7 @@ function SquareGrid() {
           players: {
             ...data.players,
             [playerInfo]:
-              (data?.players[playerInfo]
-                ? data?.players[playerInfo]
-                : 0) + 1,
+              (data?.players[playerInfo] ? data?.players[playerInfo] : 0) + 1,
           },
         });
       }
@@ -198,24 +191,30 @@ function SquareGrid() {
     if (!state.Routed && InitialRender1.current) {
       InitialRender1.current = false;
     } else if (!state.Routed && !InitialRender1.current) {
-      if (state.playerEnteredRoom && state.player1Id && state.playerFixed === "2") {
-        console.log("line 369")
+      if (
+        state.playerEnteredRoom &&
+        state.player1Id &&
+        state.playerFixed === "2"
+      ) {
+        console.log("line 369");
         updateAnotherDocState().then((res) => {
           console.log("line 373", res);
           if (res) {
-            updateDocState({player2Id:state.player2Id?state.player2Id:playerInfo}).then(()=>{
+            updateDocState({
+              player2Id: state.player2Id ? state.player2Id : playerInfo,
+            }).then(() => {
               dispatch({
                 type: "SetStates",
                 payload: {
                   modalShow: true,
                 },
               });
-            })
+            });
           }
         });
       }
     }
-  },[state.playerEnteredRoom,state.player1Id])
+  }, [state.playerEnteredRoom, state.player1Id]);
 
   useEffect(() => {
     if (
@@ -362,7 +361,10 @@ function SquareGrid() {
           right: "0",
         }}
       />
-      {state.sel !== "Select size here" && !state.won && !state.player1Live && !state.playerEnteredRoom ? (
+      {state.sel !== "Select size here" &&
+      !state.won &&
+      !state.player1Live &&
+      !state.playerEnteredRoom ? (
         <GridComponent />
       ) : state.sel === "Select size here" && state.won ? (
         <div>
@@ -371,7 +373,10 @@ function SquareGrid() {
         </div>
       ) : state.sel !== "Select size here" && state.won ? (
         ""
-      ) : (state?.playerEnteredRoom && state.player1Id && state.player2Id && state.player1Id!==state.player2Id)? (
+      ) : state?.playerEnteredRoom &&
+        state.player1Id &&
+        state.player2Id &&
+        state.player1Id !== state.player2Id ? (
         <GridComponent />
       ) : state.enterRoom ? (
         <form
@@ -386,10 +391,10 @@ function SquareGrid() {
                 type: "SetStates",
                 payload: {
                   playerEnteredRoom: true,
-                  playerFixed: "2"
+                  playerFixed: "2",
                 },
               });
-              console.log("line 266",state.player1Id)
+              console.log("line 266", state.player1Id);
             });
           }}
         >
@@ -453,24 +458,42 @@ function SquareGrid() {
             Start 2 x 3 game
           </button>
           <br />
-          <button
-            style={{
-              backgroundColor: "inherit",
-              fontSize: "large",
-              color: "#354dc1",
-              marginTop: "0.625rem",
-            }}
-            onClick={() => {
-              navigate("/signIn");
-              dispatch({
-                type: "SetStates",
-                payload: { Routed: true },
-              });
-            }}
-            // className="start-default"
-          >
-            SignIn
-          </button>
+          {state?.playerSignedIn ?  <button
+              style={{
+                backgroundColor: "inherit",
+                fontSize: "large",
+                color: "#354dc1",
+                marginTop: "0.625rem",
+              }}
+              onClick={() => {
+                dispatch({
+                  type: "SetStates",
+                  payload: { playerSignedIn:"" },
+                });
+                alert("Signed Out!")
+              }}
+            >
+              SignOut
+            </button> : (
+            <button
+              style={{
+                backgroundColor: "inherit",
+                fontSize: "large",
+                color: "#354dc1",
+                marginTop: "0.625rem",
+              }}
+              onClick={() => {
+                navigate("/signIn");
+                dispatch({
+                  type: "SetStates",
+                  payload: { 
+                    Routed: true },
+                });
+              }}
+            >
+              SignIn
+            </button>
+          )}
         </div>
       )}
       {/* Idea for rendering square color on click of all neighbouring buttons: Create react components for four buttons surrounding innerbox or square which is to be colored and pass 'isClicked' prop to Button component i.e. <Button isClicked={}/> and from Button Component pass result of isClicked to a function in App.js whose result of allButtons clicked is passed as a prop to innerBox React component and then if allButtons clicked is true then change color of innerBox from innerBox react component there itself  */}

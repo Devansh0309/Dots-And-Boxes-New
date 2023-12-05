@@ -47,7 +47,8 @@ const initialState = {
   changeGame: states ? states.changeGame : false,
   player1Live: states ? states.player1Live : false,
   player1Id: states ? states.player1Id : "",
-  player2Id: states ? states.player2Id : ""
+  player2Id: states ? states.player2Id : "",
+  playerSignedIn: states ? states.playerSignedIn: ""
 };
 
 function reducer(state, action) {
@@ -684,11 +685,11 @@ function Contexts(props) {
         );
         return false;
       }
-      const dataFromLocal =
-        typeof window !== "undefined" && window.localStorage
-          ? localStorage.getItem("player")
-          : null;
-      const playerInfo = JSON.parse(dataFromLocal);
+      // const dataFromLocal =
+      //   typeof window !== "undefined" && window.localStorage
+      //     ? localStorage.getItem("player")
+      //     : null;
+      const playerInfo = state?.playerSignedIn
       if(playerInfo && data?.players[playerInfo]===11){
         alert("Per day Limit reached!")
         return false

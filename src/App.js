@@ -24,7 +24,10 @@ function App() {
         <NewNavbar2 />
         <HowToPlay/>
       </Contexts>}/>  
-      <Route path="/signIn"  element={<Auth/>}/> 
+      <Route path="/signIn"  element={<Contexts>
+        <Auth/>
+      </Contexts>
+      }/> 
       {/* <Route path="/savedGames"  element={<Saves/>}/> */}
       </Routes>
     </div>

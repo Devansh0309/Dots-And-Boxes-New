@@ -32,7 +32,6 @@ import { doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import MuiDrawer from "@mui/material/Drawer";
 
-
 //new drawer functions
 
 const drawerWidth = 240;
@@ -125,9 +124,10 @@ function NewNavbar() {
     { title: "New Game", icon: <SportsEsportsIcon /> },
     { title: "How to Play?", icon: <LightbulbIcon /> },
     { title: "SignIn", icon: <LogoutIcon /> },
+    { title: "SignOut", icon: <SlLogout /> },
     { title: "Options", icon: <SettingsIcon /> },
     { title: "Create Room", icon: <BsDoorOpenFill /> },
-    { title: "Enter Room", icon: <MdMeetingRoom />},
+    { title: "Enter Room", icon: <MdMeetingRoom /> },
     { title: "Exit Online Room", icon: <SlLogout /> },
   ];
 
@@ -165,6 +165,8 @@ function NewNavbar() {
                 playerFixed: "1",
                 changesAdded: false,
                 playerRequesting: "",
+                player1Id:"",
+                player2Id:""
               },
             });
           });
@@ -200,6 +202,12 @@ function NewNavbar() {
         type: "SetStates",
         payload: { Routed: true },
       });
+    } else if (title === "SignOut") {
+      dispatch({
+        type: "SetStates",
+        payload: { playerSignedIn:"" },
+      });
+      alert("Signed Out!")
     } else if (title === "Home") {
       navigate("/");
     } else if (title === "Exit Online Room") {
@@ -232,6 +240,8 @@ function NewNavbar() {
                 playerFixed: "1",
                 changesAdded: false,
                 playerRequesting: "",
+                player1Id:"",
+                player2Id:""
               },
             });
           });
@@ -258,11 +268,11 @@ function NewNavbar() {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
-          const dataFromLocal =
-            typeof window !== "undefined" && window.localStorage
-              ? localStorage.getItem("player")
-              : null;
-          const playerInfo = JSON.parse(dataFromLocal);
+          // const dataFromLocal =
+          //   typeof window !== "undefined" && window.localStorage
+          //     ? localStorage.getItem("player")
+          //     : null;
+          const playerInfo = state?.playerSignedIn;
           if (playerInfo && data?.players[playerInfo] === 11) {
             alert("Per day Limit reached!");
             dispatch({
@@ -307,11 +317,11 @@ function NewNavbar() {
     // console.log("line 173", "room created");
     let playerInfo;
     if (!state.player1Id) {
-      const dataFromLocal =
-        typeof window !== "undefined" && window.localStorage
-          ? localStorage.getItem("player")
-          : null;
-      playerInfo = JSON.parse(dataFromLocal);
+      // const dataFromLocal =
+      //   typeof window !== "undefined" && window.localStorage
+      //     ? localStorage.getItem("player")
+      //     : null;
+      playerInfo = state?.playerSignedIn;
     }
     await setDoc(doc(db, "users", enterRoomId), {
       ...tempObj,
@@ -327,11 +337,11 @@ function NewNavbar() {
       player1Id: playerInfo || state.player1Id,
     }).then(() => {
       const updateAnotherDocState = async () => {
-        const dataFromLocal =
-          typeof window !== "undefined" && window.localStorage
-            ? localStorage.getItem("player")
-            : null;
-        const playerInfo = JSON.parse(dataFromLocal);
+        // const dataFromLocal =
+        //   typeof window !== "undefined" && window.localStorage
+        //     ? localStorage.getItem("player")
+        //     : null;
+        const playerInfo = state?.playerSignedIn;
         const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
         if (docSnap.exists()) {
@@ -399,7 +409,6 @@ function NewNavbar() {
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: "#4A00E0" }} open={open}>
         <Toolbar>
-
           {/* //dot and box name code here  */}
 
           <div className="cont" onClick={() => navigate("/")}>
@@ -588,11 +597,11 @@ function NewNavbar() {
 
                     if (docSnap.exists()) {
                       const data = docSnap.data();
-                      const dataFromLocal =
-                        typeof window !== "undefined" && window.localStorage
-                          ? localStorage.getItem("player")
-                          : null;
-                      const playerInfo = JSON.parse(dataFromLocal);
+                      // const dataFromLocal =
+                      //   typeof window !== "undefined" && window.localStorage
+                      //     ? localStorage.getItem("player")
+                      //     : null;
+                      const playerInfo = state?.playerSignedIn;
                       if (playerInfo && data?.players[playerInfo] === 11) {
                         alert("Per day Limit reached!");
                         dispatch({
@@ -642,7 +651,12 @@ function NewNavbar() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open} onMouseEnter={handleDrawerOpen}   onMouseLeave={handleDrawerClose}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        onMouseEnter={handleDrawerOpen}
+        onMouseLeave={handleDrawerClose}
+      >
         <img
           src={background}
           style={{
@@ -657,18 +671,50 @@ function NewNavbar() {
             opacity: "0.85",
           }}
         />
-        <DrawerHeader >
-        </DrawerHeader>
+        <DrawerHeader></DrawerHeader>
         <List sx={{ color: "white" }}>
           {navItems.map((ele) => (
             <div key={ele.title}>
               {(state.player1Live &&
                 state.playerEnteredRoom &&
                 !state.won &&
-                (ele.title === "New Game" || ele.title === "SignIn")) ||
+                (ele.title === "New Game" || ele.title === "SignIn" ||  ele.title === "SignOut")) ||
               ((state.enterRoom || state.roomId) &&
                 (ele.title === "Create Room" ||
-                  ele.title === "Enter Room")) ? null : (
+                  ele.title === "Enter Room")) ? null : ele.title ===
+                "SignIn" ? (
+                state?.playerSignedIn ? null : (
+                  <ListItem key={ele.title} disablePadding>
+                    <ListItemButton
+                      onClick={() => {
+                        handleNavClicks(ele.title);
+                        audio1.play();
+                      }}
+                    >
+                      <ListItemIcon sx={{ color: "white" }}>
+                        {ele.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={ele.title} />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              ) : ele.title === "SignOut" ? (
+                state?.playerSignedIn ? (
+                  <ListItem key={ele.title} disablePadding>
+                    <ListItemButton
+                      onClick={() => {
+                        handleNavClicks(ele.title);
+                        audio1.play();
+                      }}
+                    >
+                      <ListItemIcon sx={{ color: "white" }}>
+                        {ele.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={ele.title} />
+                    </ListItemButton>
+                  </ListItem>
+                ) : null
+              ) : (
                 <ListItem key={ele.title} disablePadding>
                   <ListItemButton
                     onClick={() => {
