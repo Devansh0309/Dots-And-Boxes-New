@@ -1,10 +1,10 @@
-import React,{ useContext } from "react";
+import React, { useContext } from "react";
 import { GridContext } from "../Contexts";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 
 function GridComponent() {
-    const { state,  areAllClicked, setClick } = useContext(GridContext);
-    const audio2 = new Audio(ButtonSound2);
+  const { state, areAllClicked, setClick } = useContext(GridContext);
+  const audio2 = new Audio(ButtonSound2);
   return (
     <div className="main-section">
       <div className="player-scores">
@@ -55,7 +55,9 @@ function GridComponent() {
             document
               .getElementsByClassName("main-section")[0]
               ?.getBoundingClientRect()?.width
-              ? `repeat(${state?.col + 1},calc(var(--width) / ${state?.col + 1}))`
+              ? `repeat(${state?.col + 1},calc(var(--width) / ${
+                  state?.col + 1
+                }))`
               : `repeat(${state?.col + 1},1fr)`,
 
           gridTemplateRows:
@@ -67,7 +69,9 @@ function GridComponent() {
               document
                 .getElementsByClassName("main-section")[0]
                 ?.getBoundingClientRect()?.height
-              ? `repeat(${state?.row + 1},calc(var(--width) / ${state?.col + 1}))`
+              ? `repeat(${state?.row + 1},calc(var(--width) / ${
+                  state?.col + 1
+                }))`
               : `repeat(${state?.row + 1},1fr)`,
 
           //for fixing square(onebox, twobox) in grid size-->
@@ -92,32 +96,10 @@ function GridComponent() {
         }}
       >
         {state?.Box?.map((item) =>
-          item % (state?.col + 1) === state?.col &&
-          item < state?.row * state?.col + state?.row + state?.col ? (
-            <div className="twobox" style={{ flexDirection: "column" }} key={item}>
-              <div className="dot"></div>
-              <button
-                className="sidelastbtn"
-                style={{
-                  backgroundColor: `${state?.verticalButtons[item]?.btncolor}`,
-                  border: `${
-                    state?.verticalButtons[item]?.active
-                      ? "2px solid black"
-                      : "none"
-                  }`,
-                }}
-                
-                disabled={(state?.player1Live && state?.playerEnteredRoom && state?.playerFixed!= state?.player) || state?.verticalButtons[item]?.isClicked}
-                onClick={() => {
-                  setClick(item, "vertical");
-                  areAllClicked(item, "vertical");
-                  audio2.play();
-                }}
-              ></button>
-            </div>
-          ) : item >= state?.row * (state?.col + 1) ? (
+          item >= state?.row * (state?.col + 1) ? (
             item < state?.row * state?.col + state?.row + state?.col ? (
-              <div className="twobox"  key={item}>
+              //dot + lower btns : horizontal btns
+              <div className="twobox" key={item}>
                 <div className="dot"></div>
                 <button
                   className="lowerbtn"
@@ -136,7 +118,9 @@ function GridComponent() {
                     }`,
                   }}
                   disabled={
-                    (state?.player1Live && state?.playerEnteredRoom && state?.playerFixed!= state?.player) || 
+                    (state?.player1Live &&
+                      state?.playerEnteredRoom &&
+                      state?.playerFixed != state?.player) ||
                     state?.horizontalButtons[
                       item - Math.floor(item / (state?.col + 1))
                     ]?.isClicked
@@ -155,9 +139,42 @@ function GridComponent() {
                 ></button>
               </div>
             ) : (
+              //last component of grid containing one dot only
               <div className="dot" key={item}></div>
             )
+          ) : item % (state?.col + 1) === state?.col ? (
+            //side last vertical btns - right vertical btns + dot
+            <div
+              className="twobox"
+              style={{ flexDirection: "column" }}
+              key={item}
+            >
+              <div className="dot"></div>
+              <button
+                className="sidelastbtn"
+                style={{
+                  backgroundColor: `${state?.verticalButtons[item]?.btncolor}`,
+                  border: `${
+                    state?.verticalButtons[item]?.active
+                      ? "2px solid black"
+                      : "none"
+                  }`,
+                }}
+                disabled={
+                  (state?.player1Live &&
+                    state?.playerEnteredRoom &&
+                    state?.playerFixed != state?.player) ||
+                  state?.verticalButtons[item]?.isClicked
+                }
+                onClick={() => {
+                  setClick(item, "vertical");
+                  areAllClicked(item, "vertical");
+                  audio2.play();
+                }}
+              ></button>
+            </div>
           ) : (
+            //dot + upper btn + left vertical btn + inner box
             <div className="onebox" key={item}>
               <div className="dot"></div>
               <button
@@ -176,9 +193,10 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                
                 disabled={
-                  (state?.player1Live && state?.playerEnteredRoom && state?.playerFixed!= state?.player) || 
+                  (state?.player1Live &&
+                    state?.playerEnteredRoom &&
+                    state?.playerFixed != state?.player) ||
                   state?.horizontalButtons[
                     item - Math.floor(item / (state?.col + 1))
                   ]?.isClicked
@@ -205,14 +223,18 @@ function GridComponent() {
                       : "none"
                   }`,
                 }}
-                disabled={(state?.player1Live && state?.playerEnteredRoom && state?.playerFixed!= state?.player) || state?.verticalButtons[item]?.isClicked}
+                disabled={
+                  (state?.player1Live &&
+                    state?.playerEnteredRoom &&
+                    state?.playerFixed != state?.player) ||
+                  state?.verticalButtons[item]?.isClicked
+                }
                 onClick={() => {
                   setClick(item, "vertical");
                   areAllClicked(item, "vertical");
                   audio2.play();
                 }}
               ></button>
-
               <div
                 className="innerBox"
                 style={{
