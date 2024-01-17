@@ -409,21 +409,9 @@ function NewNavbar() {
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: "#4A00E0" }} open={open}>
         <Toolbar>
-          {/* //dot and box name code here  */}
+          {/* //dot and box code here  */}
 
           <div className="cont" onClick={() => navigate("/")}>
-            {/* <Typography
-              variant="h4"
-              noWrap
-              component="div"
-              className="typewriter"
-              sx={{
-                display: { xs: "none", sm: "none", md: "block" },
-                overflow: "visible",
-              }}
-            >
-              𝕯𝖔𝖙 & 𝕭𝖔𝖝 𝕲𝖆𝖒𝖊
-            </Typography> */}
             <img
               width="50"
               height="40"

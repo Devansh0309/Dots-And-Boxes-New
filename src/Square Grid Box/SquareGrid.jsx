@@ -15,6 +15,7 @@ import {
 import { db } from "../firebaseConfig";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import MovingText from "react-moving-text";
 
 function SquareGrid() {
   const typeOfChange = useRef("");
@@ -72,9 +73,7 @@ function SquareGrid() {
                 changesAdded: true,
                 payload: { ...targetDoc, changesAdded: true },
               });
-            } else if (
-              typeOfChange.current === "modified"
-            ) {
+            } else if (typeOfChange.current === "modified") {
               console.log("line 119", targetDoc, typeof targetDoc);
               // setTypeOfChange("")
               typeOfChange.current = "";
@@ -363,6 +362,7 @@ function SquareGrid() {
       />
       {state.sel !== "Select size here" &&
       !state.won &&
+      !state.roomId &&
       !state.player1Live &&
       !state.playerEnteredRoom ? (
         <GridComponent />
@@ -414,7 +414,19 @@ function SquareGrid() {
           </Button>
         </form>
       ) : state.roomId || state.enterRoomId ? (
-        <p>Creating Room</p>
+        <MovingText
+          type="blur"
+          duration="1100ms"
+          delay="500ms"
+          direction="alternate-reverse"
+          timing="ease"
+          iteration="infinite"
+          fillMode="both"
+        >
+          <div style={{ fontSize: "50px", fontWeight: "600px", color: "#fff" }}>
+            Creating Room
+          </div>
+        </MovingText>
       ) : (
         <div>
           <button
@@ -458,7 +470,8 @@ function SquareGrid() {
             Start 2 x 3 game
           </button>
           <br />
-          {state?.playerSignedIn ?  <button
+          {state?.playerSignedIn ? (
+            <button
               style={{
                 backgroundColor: "inherit",
                 fontSize: "large",
@@ -468,13 +481,14 @@ function SquareGrid() {
               onClick={() => {
                 dispatch({
                   type: "SetStates",
-                  payload: { playerSignedIn:"" },
+                  payload: { playerSignedIn: "" },
                 });
-                alert("Signed Out!")
+                alert("Signed Out!");
               }}
             >
               SignOut
-            </button> : (
+            </button>
+          ) : (
             <button
               style={{
                 backgroundColor: "inherit",
@@ -486,8 +500,9 @@ function SquareGrid() {
                 navigate("/signIn");
                 dispatch({
                   type: "SetStates",
-                  payload: { 
-                    Routed: true },
+                  payload: {
+                    Routed: true,
+                  },
                 });
               }}
             >
