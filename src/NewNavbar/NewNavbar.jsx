@@ -466,6 +466,9 @@ function NewNavbar() {
                             sel: selectValue,
                             gridWidth: 55 * (col + 1),
                             gridHeight: 55 * (row + 1),
+                            player1Score: 0,
+                            player2Score: 0,
+                            numberOfSquares: 0
                           },
                         });
                         if (state.roomId) {
