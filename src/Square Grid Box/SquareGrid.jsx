@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef } from "react";
 import "./SquareGrid.css";
 import { GridContext } from "../Contexts";
-import background from "../background.jpg";
 import GridComponent from "./GridComponent";
 import {
   collection,
@@ -347,19 +346,6 @@ function SquareGrid() {
 
   return (
     <div className="Appe">
-      <img
-        src={background}
-        style={{
-          width: "100vw",
-          height: "100%",
-          position: "absolute",
-          zIndex: "-10",
-          top: "-13px",
-          bottom: "0",
-          left: "0",
-          right: "0",
-        }}
-      />
       {state.sel !== "Select size here" &&
       !state.won &&
       !state.roomId &&
@@ -444,8 +430,8 @@ function SquareGrid() {
                     col: 3,
                     ...obj,
                     sel: "2*3",
-                    gridWidth: 320,
-                    gridHeight: 240,
+                    gridWidth: 55*(3+1),
+                    gridHeight: 55*(2+1)
                   },
                 });
               }
@@ -455,8 +441,8 @@ function SquareGrid() {
                   col: 3,
                   ...obj,
                   sel: "2*3",
-                  gridWidth: 320,
-                  gridHeight: 240,
+                  gridWidth: 55*(3+1),
+                  gridHeight: 55*(2+1)
                 });
             }}
             style={{

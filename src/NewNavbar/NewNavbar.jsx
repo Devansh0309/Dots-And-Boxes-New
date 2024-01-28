@@ -405,7 +405,7 @@ function NewNavbar() {
   };
 
   return (
-    <Box sx={{ display: "flex", minWidth: "100vw", height: "60px" }}>
+    <Box sx={{ display: "flex", minWidth: "100vw", height: "56px" }}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: "#4A00E0" }} open={open}>
         <Toolbar>

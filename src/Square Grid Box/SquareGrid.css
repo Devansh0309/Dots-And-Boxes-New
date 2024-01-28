@@ -12,6 +12,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url("../background.jpg");
+  background-size:cover;
+  background-repeat: no-repeat;
 }
 .main-section{
   display: flex;
@@ -45,7 +48,7 @@
   --height:500px;
   --width:600px;
   --square_height:55px;
-    --square_width:55px;
+  --square_width:55px;
   justify-content:flex-start;
   margin: auto;
   padding: 0.3125rem;

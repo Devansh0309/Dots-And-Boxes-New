@@ -1,10 +1,49 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GridContext } from "../Contexts";
 import ButtonSound2 from "../NewNavbar/ButtonSound/button1.mp3";
 
 function GridComponent() {
   const { state, areAllClicked, setClick } = useContext(GridContext);
   const audio2 = new Audio(ButtonSound2);
+  const [mainProps, setMainProps] = useState({});
+
+  // useEffect(() => {
+  //   function handleSize() {
+  //     const ele = document.getElementsByClassName("main-section")[0];
+  //     const width =
+  //       state?.gridWidth > ele.getBoundingClientRect().width
+  //         ? "var(--width)"
+  //         : `calc(${state?.col + 1} * var(--square_width))`;
+
+  //     const height =
+  //       state?.gridHeight > ele.getBoundingClientRect().height ||
+  //       state?.gridWidth > ele.getBoundingClientRect().width
+  //         ? "var(--height)"
+  //         : `calc(${state?.row + 1} * var(--square_height))`;
+
+  //     const gridColumnsWidth =
+  //       state?.gridWidth > ele.getBoundingClientRect()?.width
+  //         ? `repeat(${state?.col + 1},calc(var(--width) / ${state?.col + 1}))`
+  //         : `repeat(${state?.col + 1},1fr)`;
+
+  //     const gridRowsWidth =
+  //       state?.gridWidth > ele.getBoundingClientRect()?.width ||
+  //       state?.gridHeight > ele.getBoundingClientRect().height
+  //         ? `repeat(${state?.row + 1},calc(var(--width) / ${state?.col + 1}))`
+  //         : `repeat(${state?.row + 1},1fr)`;
+  //     setMainProps({ width, height, gridColumnsWidth, gridRowsWidth });
+  //   }
+
+  //   // Add event listener
+  //   window.addEventListener("resize", handleSize);
+
+  //   // Call handler right away so state gets updated with initial window size
+  //   handleSize();
+
+  //   // Remove event listener on cleanup
+  //   return () => window?.removeEventListener("resize", handleSize);
+  // }, []);
+
   return (
     <div className="main-section">
       <div className="player-scores">
@@ -30,49 +69,53 @@ function GridComponent() {
         style={{
           //for fixing grid size-->
           //calc(${state?.row+1} * var(--square_height)=(state?.row+1)*80, where var(--square_height)=55px
-          height:
-            state?.gridWidth >
-              document
-                .getElementsByClassName("main-section")[0]
-                ?.getBoundingClientRect()?.width ||
-            state?.gridHeight >
-              document
-                .getElementsByClassName("main-section")[0]
-                ?.getBoundingClientRect()?.height
-              ? "var(--height)"
-              : `calc(${state?.row + 1} * var(--square_height))`,
-
-          width:
-            state?.gridWidth >
+          height: 
+          // mainProps?.height,
+          state?.gridWidth >
             document
               .getElementsByClassName("main-section")[0]
-              ?.getBoundingClientRect()?.width
-              ? "var(--width)"
-              : `calc(${state?.col + 1} * var(--square_width))`,
-
-          gridTemplateColumns:
-            state?.gridWidth >
+              ?.getBoundingClientRect()?.width ||
+          state?.gridHeight >
             document
               .getElementsByClassName("main-section")[0]
-              ?.getBoundingClientRect()?.width
-              ? `repeat(${state?.col + 1},calc(var(--width) / ${
-                  state?.col + 1
-                }))`
-              : `repeat(${state?.col + 1},1fr)`,
+              ?.getBoundingClientRect()?.height
+            ? "var(--height)"
+            : `calc(${state?.row + 1} * var(--square_height))`,
 
-          gridTemplateRows:
-            state?.gridWidth >
-              document
-                .getElementsByClassName("main-section")[0]
-                ?.getBoundingClientRect()?.width ||
-            state?.gridHeight >
-              document
-                .getElementsByClassName("main-section")[0]
-                ?.getBoundingClientRect()?.height
-              ? `repeat(${state?.row + 1},calc(var(--width) / ${
-                  state?.col + 1
-                }))`
-              : `repeat(${state?.row + 1},1fr)`,
+          width: 
+          // mainProps?.width,
+          state?.gridWidth >
+          document
+            .getElementsByClassName("main-section")[0]
+            ?.getBoundingClientRect()?.width
+            ? "var(--width)"
+            : `calc(${state?.col + 1} * var(--square_width))`,
+
+          gridTemplateColumns: 
+          // mainProps?.gridColumnsWidth,
+          state?.gridWidth >
+          document
+            .getElementsByClassName("main-section")[0]
+            ?.getBoundingClientRect()?.width
+            ? `repeat(${state?.col + 1},calc(var(--width) / ${
+                state?.col + 1
+              }))`
+            : `repeat(${state?.col + 1},1fr)`,
+
+          gridTemplateRows: 
+          // mainProps?.gridRowsWidth,
+          state?.gridWidth >
+            document
+              .getElementsByClassName("main-section")[0]
+              ?.getBoundingClientRect()?.width ||
+          state?.gridHeight >
+            document
+              .getElementsByClassName("main-section")[0]
+              ?.getBoundingClientRect()?.height
+            ? `repeat(${state?.row + 1},calc(var(--width) / ${
+                state?.col + 1
+              }))`
+            : `repeat(${state?.row + 1},1fr)`,
 
           //for fixing square(onebox, twobox) in grid size-->
           // height:`calc(${state?.row+1}*var(--height))`,
