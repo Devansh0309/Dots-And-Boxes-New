@@ -140,7 +140,7 @@ function NewNavbar2() {
 <Typography component="div"
  sx={{alignItems:"right",display:"flex",gap:"20px"}}>
   <Typography sx={{ display: { xs: 'none', sm: 'block'  },overflow:'visible' }} className="Navbartxt" variant="h6" noWrap 
-    component="div" title='New Game' onClick={(e)=>{audio2.play();handleNavClicks('Home');}} >Home
+    component="div" title='Reset Game' onClick={(e)=>{audio2.play();handleNavClicks('Home');}} >Home
   </Typography>
 </Typography>
         </Toolbar>

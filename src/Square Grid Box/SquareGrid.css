@@ -190,8 +190,8 @@
     .gridBox{
       --height:200px;
       --width:300px;
-      --square_height:55px;
-      --square_width:55px;
+      --square_height:50px;
+      --square_width:50px;
     }
   }
   @media all and (min-width:375px) and (max-width:424px){ 
@@ -199,8 +199,8 @@
     .gridBox{
       --height:270px;
       --width:370px;
-      --square_height:55px;
-      --square_width:55px;
+      --square_height:50px;
+      --square_width:50px;
     }
   }
   

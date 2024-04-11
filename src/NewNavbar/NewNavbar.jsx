@@ -121,7 +121,7 @@ function NewNavbar() {
 
   const navItems = [
     { title: "Home", icon: <HomeIcon /> },
-    { title: "New Game", icon: <SportsEsportsIcon /> },
+    { title: "Reset Game", icon: <SportsEsportsIcon /> },
     { title: "How to Play?", icon: <LightbulbIcon /> },
     { title: "SignIn", icon: <LogoutIcon /> },
     { title: "SignOut", icon: <SlLogout /> },
@@ -132,12 +132,12 @@ function NewNavbar() {
   ];
 
   const handleNavClicks = (title) => {
-    if (title === "New Game" && state.sel !== "Select size here") {
+    if (title === "Reset Game" && state.sel !== "Select size here") {
       if (
         (state.roomId || state.enterRoomId) &&
         state.playerRequesting !== state.playerFixed
       ) {
-        console.log("new game clicked", "line 122");
+        console.log("Reset Game clicked", "line 122");
         const temp = async () => {
           await deleteDoc(
             doc(db, "users", state.roomId || state.enterRoomId)
@@ -194,7 +194,7 @@ function NewNavbar() {
           },
         });
       }
-    } else if (title === "New Game" && state.sel === "Select size here") {
+    } else if (title === "Reset Game" && state.sel === "Select size here") {
       alert("Select size or Start Game");
     } else if (title === "SignIn") {
       navigate("/signIn");
@@ -436,13 +436,13 @@ function NewNavbar() {
                   variant="h6"
                   noWrap
                   component="div"
-                  title="New Game"
+                  title="Reset Game"
                   onClick={(e) => {
                     audio2.play();
                     handleNavClicks(e.target.title);
                   }}
                 >
-                  New Game
+                  Reset Game
                 </Typography>
                 {state.start ? (
                   <select
@@ -511,7 +511,7 @@ function NewNavbar() {
                     onClick={() => {
                       if (state.playerEnteredRoom) {
                         alert(
-                          "Either click on new game or exit, cannot change size in between!"
+                          "Either click on Reset Game or exit, cannot change size in between!"
                         );
                         return;
                       }
@@ -669,7 +669,7 @@ function NewNavbar() {
               {(state.player1Live &&
                 state.playerEnteredRoom &&
                 !state.won &&
-                (ele.title === "New Game" || ele.title === "SignIn" ||  ele.title === "SignOut")) ||
+                (ele.title === "Reset Game" || ele.title === "SignIn" ||  ele.title === "SignOut")) ||
               ((state.enterRoom || state.roomId) &&
                 (ele.title === "Create Room" ||
                   ele.title === "Enter Room")) ? null : ele.title ===
