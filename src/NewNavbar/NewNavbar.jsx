@@ -116,7 +116,7 @@ function NewNavbar() {
     setOpen(false);
   };
 
-  const { state, dispatch, updateDocState, checkDocs } =
+  const { state, dispatch, updateDocState, checkDocs, setStatesAfterSel } =
     useContext(GridContext);
 
   const navItems = [
@@ -360,50 +360,6 @@ function NewNavbar() {
     });
   };
 
-  const setStatesAfterSel = (row, col) => {
-    let arr = [];
-    let horizontal = [];
-    let vertical = [];
-    let squares = [];
-    for (let i = 0; i <= row * col + row + col; i++) {
-      arr.push(i);
-    }
-
-    for (let i = 0; i < row * col + col; i++) {
-      horizontal.push({
-        key: i,
-        type: "horizontal",
-        isClicked: false,
-        btncolor: "#2196f3",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < row * col + row; i++) {
-      vertical.push({
-        key: i,
-        type: "vertical",
-        isClicked: false,
-        btncolor: "#2196f3",
-        active: false,
-      });
-    }
-
-    for (let i = 0; i < row * col; i++) {
-      squares.push({
-        allClicked: false,
-        squarecolor: "lightgrey",
-        active: false,
-      });
-    }
-    return {
-      horizontalButtons: horizontal,
-      verticalButtons: vertical,
-      squaresColors: squares,
-      Box: arr,
-    };
-  };
-
   return (
     <Box sx={{ display: "flex", minWidth: "100vw", height: "56px" }}>
       <CssBaseline />
@@ -464,8 +420,8 @@ function NewNavbar() {
                             col: col,
                             ...obj,
                             sel: selectValue,
-                            gridWidth: 55 * (col + 1),
-                            gridHeight: 55 * (row + 1),
+                            gridWidth: `var(--square_width) * ${col + 1}`,
+                            gridHeight: `var(--square_height) * ${row + 1}`,
                             player1Score: 0,
                             player2Score: 0,
                             numberOfSquares: 0
@@ -477,8 +433,8 @@ function NewNavbar() {
                             col: col,
                             ...obj,
                             sel: selectValue,
-                            gridWidth: 80 * (col + 1),
-                            gridHeight: 80 * (row + 1),
+                            gridWidth: `var(--square_width) * ${col + 1}`,
+                            gridHeight: `var(--square_height) * ${row + 1}`,
                           });
                         }
                       }
