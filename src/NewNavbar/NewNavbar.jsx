@@ -411,6 +411,15 @@ function NewNavbar() {
                       let obj = setStatesAfterSel(row, col);
                       console.log("line 275", row, col, obj);
                       if (row && col && Object.keys(obj).length > 0) {
+                        //Commented, keep commented
+                        // const ele = document.querySelector('.gridBox')
+                        // console.log(typeof ele,ele)
+                        // const squareWidth = getComputedStyle(ele[0])?.getPropertyValue('--square_width').split("px")[0];
+                        // const squareHeight = getComputedStyle(ele[0])?.getPropertyValue('--square_height').split("px")[0];
+                        // console.log(squareHeight, squareWidth)
+                        // const gridWidth = (state.col+1)*squareWidth
+                        // const gridHeight = (state.row+1)*squareHeight
+                        //Commented, keep commented
                         dispatch({
                           type: "SetStates",
                           payload: {
@@ -420,8 +429,8 @@ function NewNavbar() {
                             col: col,
                             ...obj,
                             sel: selectValue,
-                            gridWidth: `var(--square_width) * ${col + 1}`,
-                            gridHeight: `var(--square_height) * ${row + 1}`,
+                            gridWidth: 0,
+                            gridHeight: 0,
                             player1Score: 0,
                             player2Score: 0,
                             numberOfSquares: 0
@@ -433,8 +442,8 @@ function NewNavbar() {
                             col: col,
                             ...obj,
                             sel: selectValue,
-                            gridWidth: `var(--square_width) * ${col + 1}`,
-                            gridHeight: `var(--square_height) * ${row + 1}`,
+                            gridWidth: 0,
+                            gridHeight: 0,
                           });
                         }
                       }

@@ -10,28 +10,42 @@ function GridComponent() {
   useEffect(() => {
     function handleSize() {
       const ele = document.getElementsByClassName("main-section")[0];
+      console.log("inside handleSize","grid width set: ",state.gridWidth,"current viewportWidth: ",
+       ele.getBoundingClientRect().width)  
+       const squareWidth = getComputedStyle(document.getElementsByClassName("gridBox")[0])?.getPropertyValue('--square_width').split("px")[0];
+       const squareHeight = getComputedStyle(document.getElementsByClassName("gridBox")[0])?.getPropertyValue('--square_height').split("px")[0];
+       
+       console.log(squareHeight, squareWidth)
+
+       const gridW = getComputedStyle(document.getElementsByClassName("gridBox")[0])?.getPropertyValue('--width').split("px")[0];
+       const gridH = getComputedStyle(document.getElementsByClassName("gridBox")[0])?.getPropertyValue('--height').split("px")[0];
+       const gridWidth = (state.col+1)*squareWidth
+       const gridHeight = (state.row+1)*squareHeight
       const width =
-        state.gridWidth > ele.getBoundingClientRect().width
-          ? "var(--width)"
-          : `calc(${state.col + 1} * var(--square_width))`;
+        gridWidth > ele.getBoundingClientRect().width
+          ?`${0.85*gridW}`
+          : gridWidth;
 
       const height =
-        state.gridHeight > ele.getBoundingClientRect().height ||
-        state.gridWidth > ele.getBoundingClientRect().width
-          ? "var(--height)"
-          : `calc(${state.row + 1} * var(--square_height))`;
+        gridHeight > ele.getBoundingClientRect().height ||
+        gridWidth > ele.getBoundingClientRect().width
+          ? `${0.85*gridH}`
+          : gridHeight;
 
       const gridColumnsWidth =
-        state.gridWidth > ele.getBoundingClientRect().width
-          ? `repeat(${state.col + 1},calc(var(--width) / ${state.col + 1}))`
+        gridWidth > ele.getBoundingClientRect().width
+          ? `repeat(${state.col + 1},${`${0.85*gridW}`/(state.col + 1)}px)`
           : `repeat(${state.col + 1},1fr)`;
 
       const gridRowsWidth =
-        state.gridWidth > ele.getBoundingClientRect().width ||
-        state.gridHeight > ele.getBoundingClientRect().height
-          ? `repeat(${state.row + 1},calc(var(--height) / ${state.row + 1}))`
+        gridWidth > ele.getBoundingClientRect().width ||
+        gridHeight > ele.getBoundingClientRect().height
+          ? `repeat(${state.row + 1},${`${0.85*gridH}`/(state.row + 1)}px)`
           : `repeat(${state.row + 1},1fr)`;
-
+      
+      
+          console.log("inside handleSize below","grid width set: ",gridWidth,"current viewportWidth: ",
+          ele.getBoundingClientRect().width,"width set", width,"height set", height, gridColumnsWidth, gridRowsWidth) 
       setMainProps({ width, height, gridColumnsWidth, gridRowsWidth });
     }
 
@@ -72,10 +86,9 @@ function GridComponent() {
       </div>
       <div
         className="gridBox"
-        id="grid-box"
         style={{
-          height: mainProps.height || "var(--height)",
-          width: mainProps.width || "var(--width)",
+          height: `${mainProps.height}px` || 'var(--height)',
+          width: `${mainProps.width}px` || 'var(--width)',
           gridTemplateColumns: mainProps.gridColumnsWidth || "1fr",
           gridTemplateRows: mainProps.gridRowsWidth || "1fr",
         }}
