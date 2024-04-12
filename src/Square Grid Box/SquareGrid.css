@@ -51,12 +51,11 @@
   --square_width:55px;
   justify-content:flex-start;
   margin: auto;
-  padding-left: 3px;
+  /* padding-left: 10px; */
   gap: 0;
   position:relative;
-  left: 1.25rem;
+  left: 1rem;
   margin-top: 0.625rem;
-  padding: 0.625rem;
   }
   
   .onebox{
