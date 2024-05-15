@@ -620,8 +620,7 @@ function Contexts(props) {
         [type === "horizontal"
           ? state.horizontalButtons
           : state.verticalButtons]: temp,
-      });
-  };
+      });};
   const checkDocs = async (enterRoomId) => {
     const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
