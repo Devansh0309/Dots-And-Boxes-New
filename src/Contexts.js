@@ -48,7 +48,7 @@ const initialState = {
   player1Live: states ? states.player1Live : false,
   player1Id: states ? states.player1Id : "",
   player2Id: states ? states.player2Id : "",
-  playerSignedIn: states ? states.playerSignedIn: ""
+  playerSignedIn: states ? states.playerSignedIn : "",
 };
 
 function reducer(state, action) {
@@ -133,16 +133,7 @@ function Contexts(props) {
               numberOfSquares: noOfSquares + 1,
             });
           audio3.play();
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
+          return;
         }
       } else if (Math.floor(id / state.col) === state.row) {
         if (
@@ -182,17 +173,8 @@ function Contexts(props) {
               numberOfSquares: noOfSquares + 1,
             });
           audio3.play();
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
-        }
+          return;
+        } 
       } else {
         if (
           state.horizontalButtons[id - state.col].isClicked &&
@@ -239,6 +221,7 @@ function Contexts(props) {
               numberOfSquares: noOfSquares + 1,
             });
           audio3.play();
+          return;
         } else if (
           (!state.horizontalButtons[id - state.col].isClicked ||
             !state.horizontalButtons[id].isClicked ||
@@ -284,6 +267,7 @@ function Contexts(props) {
               numberOfSquares: noOfSquares + 1,
             });
           audio3.play();
+          return;
         } else if (
           state.horizontalButtons[id - state.col].isClicked &&
           state.horizontalButtons[id].isClicked &&
@@ -332,16 +316,7 @@ function Contexts(props) {
               numberOfSquares: noOfSquares + 2,
             });
           audio3.play();
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
+          return;
         }
       }
     } else {
@@ -387,16 +362,7 @@ function Contexts(props) {
               squaresColors: temp,
               numberOfSquares: noOfSquares + 1,
             });
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
+          return;  
         }
       } else if (id % (state.col + 1) === state.col) {
         //last column right vertical btn id provided
@@ -440,16 +406,7 @@ function Contexts(props) {
               squaresColors: temp,
               numberOfSquares: noOfSquares + 1,
             });
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
+          return;  
         }
       } else {
         //middle column (not first and not last) btn id provided
@@ -501,6 +458,8 @@ function Contexts(props) {
               squaresColors: temp,
               numberOfSquares: noOfSquares + 1,
             });
+
+          return;  
         } else if (
           (!state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked ||
@@ -549,6 +508,7 @@ function Contexts(props) {
               squaresColors: temp,
               numberOfSquares: noOfSquares + 1,
             });
+          return;  
         } else if (
           state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
             .isClicked &&
@@ -604,74 +564,65 @@ function Contexts(props) {
               squaresColors: temp,
               numberOfSquares: noOfSquares + 2,
             });
-        } else {
-          const playerChance = state.player === "1" ? "2" : "1";
-          dispatch({
-            type: "SetStates",
-            payload: { player: state.player === "1" ? "2" : "1" },
-          });
-
-          if (state.playerEnteredRoom) {
-            updateDocState({ player: playerChance });
-          }
+          return;  
         }
       }
+    }
+    const playerChance = state.player === "1" ? "2" : "1";
+    dispatch({
+      type: "SetStates",
+      payload: { player: state.player === "1" ? "2" : "1" },
+    });
+
+    if (state.playerEnteredRoom) {
+      updateDocState({ player: playerChance });
     }
   };
   const setClick = (id, type) => {
     // console.log('Inside setClick')
-    if (type === "horizontal") {
-      let temp = [...state.horizontalButtons];
-      let temp2 = [...state.verticalButtons];
-      temp[id].isClicked = true;
-      temp[id].active = true;
-      for (let i = 0; i < temp.length; i++) {
-        if (i !== id) {
-          temp[i].active = false;
-        }
+    let temp = [
+      ...(type === "horizontal"
+        ? state.horizontalButtons
+        : state.verticalButtons),
+    ];
+    let temp2 = [
+      ...(type === "horizontal"
+        ? state.verticalButtons
+        : state.horizontalButtons),
+    ];
+    temp[id].isClicked = true;
+    temp[id].active = true;
+    for (let i = 0; i < temp.length; i++) {
+      if (i !== id) {
+        temp[i].active = false;
       }
-      for (let i = 0; i < temp2.length; i++) {
-        temp2[i].active = false;
-      }
-      if (state.player === "1") {
-        temp[id].btncolor = "#eb5d5d";
-        // red
-      } else {
-        temp[id].btncolor = "#42c442";
-        // green
-      }
-      dispatch({ type: "SetStates", payload: { horizontalButtons: temp } });
-      if (state.playerEnteredRoom)
-        updateDocState({
-          horizontalButtons: temp,
-        });
-    } else {
-      let temp = [...state.verticalButtons];
-      let temp2 = [...state.horizontalButtons];
-      temp[id].isClicked = true;
-      temp[id].active = true;
-      for (let i = 0; i < temp.length; i++) {
-        if (i !== id) {
-          temp[i].active = false;
-        }
-      }
-      for (let i = 0; i < temp2.length; i++) {
-        temp2[i].active = false;
-      }
-      if (state.player === "1") {
-        temp[id].btncolor = "#eb5d5d";
-      } else {
-        temp[id].btncolor = "#42c442";
-      }
-      dispatch({ type: "SetStates", payload: { verticalButtons: temp } });
-      if (state.playerEnteredRoom)
-        updateDocState({
-          verticalButtons: temp,
-        });
     }
+    for (let i = 0; i < temp2.length; i++) {
+      temp2[i].active = false;
+    }
+    if (state.player === "1") {
+      temp[id].btncolor = "#eb5d5d";
+      // red
+    } else {
+      temp[id].btncolor = "#42c442";
+      // green
+    }
+    dispatch({
+      type: "SetStates",
+      payload: {
+        [type === "horizontal"
+          ? state.horizontalButtons
+          : state.verticalButtons]: temp,
+      },
+    });
+    if (state.playerEnteredRoom)
+      updateDocState({
+        [type === "horizontal"
+          ? state.horizontalButtons
+          : state.verticalButtons]: temp,
+      });
   };
   const checkDocs = async (enterRoomId) => {
-    
     const docSnap = await getDoc(doc(db, "games", "XhxrYcgKoKl9eLoCVFl2"));
 
     if (docSnap.exists()) {
@@ -689,14 +640,13 @@ function Contexts(props) {
       //   typeof window !== "undefined" && window.localStorage
       //     ? localStorage.getItem("player")
       //     : null;
-      const playerInfo = state?.playerSignedIn
-      if(playerInfo && data?.players[playerInfo]===11){
-        alert("Per day Limit reached!")
-        return false
-      }
-      else if(!playerInfo){
-        alert("Please signIn")
-        return false
+      const playerInfo = state?.playerSignedIn;
+      if (playerInfo && data?.players[playerInfo] === 11) {
+        alert("Per day Limit reached!");
+        return false;
+      } else if (!playerInfo) {
+        alert("Please signIn");
+        return false;
       }
       // console.log("Document data:", docSnap.data());
     }
@@ -779,7 +729,6 @@ function Contexts(props) {
       {props.children}
     </GridContext.Provider>
   );
-  
 }
 
 export default Contexts;
