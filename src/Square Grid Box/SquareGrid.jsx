@@ -430,8 +430,8 @@ function SquareGrid() {
                     col: 3,
                     ...obj,
                     sel: "2*3",
-                    gridWidth: 55*(3+1),
-                    gridHeight: 55*(2+1)
+                    gridWidth: 55 * (3 + 1),
+                    gridHeight: 55 * (2 + 1),
                   },
                 });
               }
@@ -441,8 +441,8 @@ function SquareGrid() {
                   col: 3,
                   ...obj,
                   sel: "2*3",
-                  gridWidth: 55*(3+1),
-                  gridHeight: 55*(2+1)
+                  gridWidth: 55 * (3 + 1),
+                  gridHeight: 55 * (2 + 1),
                 });
             }}
             style={{
