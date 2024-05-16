@@ -92,26 +92,31 @@ function Contexts(props) {
     //put square formed function in dotsAndDashes.java
     // console.log('Inside areAllClicked')
 
-    if (type === "horizontal") {
-      if (Math.floor(id / state.col) === 0) {
+      const firstAndSecondCondition = type === "horizontal"?Math.floor(id / state.col):id % (state.col + 1)
+      const conditionRightSide2 = type === "horizontal"?state.row:state.col
+      if (firstAndSecondCondition === 0) {
+        const upperBtnIndex=type === "horizontal"?id:id - Math.floor(id / (state.col + 1))
+        const lowerBtnIndex=type === "horizontal"?id + state.col:id - Math.floor(id / (state.col + 1)) + state.col
+        const leftBtnIndex = type === "horizontal"?id:id
+        const rightBtnIndex = type === "horizontal"?id+1:id+1
         if (
-          state.horizontalButtons[id].isClicked &&
-          state.horizontalButtons[id + state.col].isClicked &&
-          state.verticalButtons[id].isClicked &&
-          state.verticalButtons[id + 1].isClicked
+          state.horizontalButtons[upperBtnIndex].isClicked &&
+          state.horizontalButtons[lowerBtnIndex].isClicked &&
+          state.verticalButtons[leftBtnIndex].isClicked &&
+          state.verticalButtons[rightBtnIndex].isClicked
         ) {
           let temp = [...state.squaresColors];
-          temp[id].allClicked = true;
-          temp[id].active = true;
+          temp[upperBtnIndex].allClicked = true;
+          temp[upperBtnIndex].active = true;
           for (let i = 0; i < temp.length; i++) {
-            if (i !== id) {
+            if (i !== upperBtnIndex) {
               temp[i].active = false;
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "red";
+            temp[upperBtnIndex].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "green";
+            temp[upperBtnIndex].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -135,25 +140,29 @@ function Contexts(props) {
           audio3.play();
           return;
         }
-      } else if (Math.floor(id / state.col) === state.row) {
+      } else if (firstAndSecondCondition === conditionRightSide2) {
+        const upperBtnIndex=type === "horizontal"?id - state.col:id - Math.ceil(id / (state.col + 1))
+        const lowerBtnIndex=type === "horizontal"?id:id + state.col - Math.ceil(id / (state.col + 1))
+        const leftBtnIndex = type === "horizontal"?id - state.col + state.row - 1:id-1
+        const rightBtnIndex = type === "horizontal"?id - state.col + state.row:id
         if (
-          state.horizontalButtons[id - state.col].isClicked &&
-          state.horizontalButtons[id].isClicked &&
-          state.verticalButtons[id - state.col + state.row - 1].isClicked &&
-          state.verticalButtons[id - state.col + state.row].isClicked
+          state.horizontalButtons[upperBtnIndex].isClicked &&
+          state.horizontalButtons[lowerBtnIndex].isClicked &&
+          state.verticalButtons[leftBtnIndex].isClicked &&
+          state.verticalButtons[rightBtnIndex].isClicked
         ) {
           let temp = [...state.squaresColors];
-          temp[id - state.col].allClicked = true;
-          temp[id - state.col].active = true;
+          temp[upperBtnIndex].allClicked = true;
+          temp[upperBtnIndex].active = true;
           for (let i = 0; i < temp.length; i++) {
-            if (i !== id - state.col) {
+            if (i !== upperBtnIndex) {
               temp[i].active = false;
             }
           }
           if (state.player === "1") {
-            temp[id - state.col].squarecolor = "red";
+            temp[upperBtnIndex].squarecolor = "red";
           } else {
-            temp[id - state.col].squarecolor = "green";
+            temp[upperBtnIndex].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -176,32 +185,41 @@ function Contexts(props) {
           return;
         } 
       } else {
+        const firstSquareupperBtnIndex=type === "horizontal"?id - state.col:id - Math.floor(id / (state.col + 1))
+        const firstSquarelowerBtnIndex=type === "horizontal"?id:id + state.col - Math.floor(id / (state.col + 1))
+        const firstSquareleftBtnIndex = type === "horizontal"?id - state.col + Math.floor(id / state.col) - 1:id
+        const firstSquarerightBtnIndex = type === "horizontal"?id - state.col + Math.floor(id / state.col):id+1
+
+        const secondSquareupperBtnIndex=type === "horizontal"?id:id - Math.ceil(id / (state.col + 1))
+        const secondSquarelowerBtnIndex=type === "horizontal"?id + state.col:id + state.col - Math.ceil(id / (state.col + 1))
+        const secondSquareleftBtnIndex = type === "horizontal"?id + Math.floor(id / state.col):id-1
+        const secondSquarerightBtnIndex = type === "horizontal"?id + Math.floor(id / state.col)+1:id
         if (
-          state.horizontalButtons[id - state.col].isClicked &&
-          state.horizontalButtons[id].isClicked &&
-          state.verticalButtons[id - state.col + Math.floor(id / state.col) - 1]
+          state.horizontalButtons[firstSquareupperBtnIndex].isClicked &&
+          state.horizontalButtons[firstSquarelowerBtnIndex].isClicked &&
+          state.verticalButtons[firstSquareleftBtnIndex]
             .isClicked &&
-          state.verticalButtons[id - state.col + Math.floor(id / state.col)]
+          state.verticalButtons[firstSquarerightBtnIndex]
             .isClicked &&
-          (!state.horizontalButtons[id].isClicked ||
-            !state.horizontalButtons[id + state.col].isClicked ||
-            !state.verticalButtons[id + Math.floor(id / state.col)].isClicked ||
-            !state.verticalButtons[id + Math.floor(id / state.col) + 1]
+          (!state.horizontalButtons[secondSquareupperBtnIndex].isClicked ||
+            !state.horizontalButtons[secondSquarelowerBtnIndex].isClicked ||
+            !state.verticalButtons[secondSquareleftBtnIndex].isClicked ||
+            !state.verticalButtons[secondSquarerightBtnIndex]
               .isClicked)
         ) {
           //first row upper btn id provided
           let temp = [...state.squaresColors];
-          temp[id - state.col].allClicked = true;
-          temp[id - state.col].active = true;
+          temp[firstSquareupperBtnIndex].allClicked = true;
+          temp[firstSquareupperBtnIndex].active = true;
           for (let i = 0; i < temp.length; i++) {
-            if (i !== id - state.col) {
+            if (i !== firstSquareupperBtnIndex) {
               temp[i].active = false;
             }
           }
           if (state.player === "1") {
-            temp[id - state.col].squarecolor = "red";
+            temp[firstSquareupperBtnIndex].squarecolor = "red";
           } else {
-            temp[id - state.col].squarecolor = "green";
+            temp[firstSquareupperBtnIndex].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -223,31 +241,31 @@ function Contexts(props) {
           audio3.play();
           return;
         } else if (
-          (!state.horizontalButtons[id - state.col].isClicked ||
-            !state.horizontalButtons[id].isClicked ||
+          (!state.horizontalButtons[firstSquareupperBtnIndex].isClicked ||
+            !state.horizontalButtons[firstSquarelowerBtnIndex].isClicked ||
             !state.verticalButtons[
-              id - state.col + Math.floor(id / state.col) - 1
+              firstSquareleftBtnIndex
             ].isClicked ||
-            !state.verticalButtons[id - state.col + Math.floor(id / state.col)]
+            !state.verticalButtons[firstSquarerightBtnIndex]
               .isClicked) &&
-          state.horizontalButtons[id].isClicked &&
-          state.horizontalButtons[id + state.col].isClicked &&
-          state.verticalButtons[id + Math.floor(id / state.col)].isClicked &&
-          state.verticalButtons[id + Math.floor(id / state.col) + 1].isClicked
+          state.horizontalButtons[secondSquareupperBtnIndex].isClicked &&
+          state.horizontalButtons[secondSquarelowerBtnIndex].isClicked &&
+          state.verticalButtons[secondSquareleftBtnIndex].isClicked &&
+          state.verticalButtons[secondSquarerightBtnIndex].isClicked
         ) {
           //last row lower btn id provided
           let temp = [...state.squaresColors];
-          temp[id].allClicked = true;
-          temp[id].active = true;
+          temp[secondSquareupperBtnIndex].allClicked = true;
+          temp[secondSquareupperBtnIndex].active = true;
           for (let i = 0; i < temp.length; i++) {
-            if (i !== id) {
+            if (i !== secondSquareupperBtnIndex) {
               temp[i].active = false;
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "red";
+            temp[secondSquareupperBtnIndex].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "green";
+            temp[secondSquareupperBtnIndex].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -269,34 +287,34 @@ function Contexts(props) {
           audio3.play();
           return;
         } else if (
-          state.horizontalButtons[id - state.col].isClicked &&
-          state.horizontalButtons[id].isClicked &&
-          state.verticalButtons[id - state.col + Math.floor(id / state.col) - 1]
+          state.horizontalButtons[firstSquareupperBtnIndex].isClicked &&
+          state.horizontalButtons[firstSquarelowerBtnIndex].isClicked &&
+          state.verticalButtons[firstSquareleftBtnIndex]
             .isClicked &&
-          state.verticalButtons[id - state.col + Math.floor(id / state.col)]
+          state.verticalButtons[firstSquarerightBtnIndex]
             .isClicked &&
-          state.horizontalButtons[id].isClicked &&
-          state.horizontalButtons[id + state.col].isClicked &&
-          state.verticalButtons[id + Math.floor(id / state.col)].isClicked &&
-          state.verticalButtons[id + Math.floor(id / state.col) + 1].isClicked
+          state.horizontalButtons[secondSquareupperBtnIndex].isClicked &&
+          state.horizontalButtons[secondSquarelowerBtnIndex].isClicked &&
+          state.verticalButtons[secondSquareleftBtnIndex].isClicked &&
+          state.verticalButtons[secondSquarerightBtnIndex].isClicked
         ) {
           //middle row (not first and not last) btn id provided
           let temp = [...state.squaresColors];
-          temp[id].allClicked = true;
-          temp[id - state.col].allClicked = true;
-          temp[id].active = true;
-          temp[id - state.col].active = true;
+          temp[secondSquareupperBtnIndex].allClicked = true;
+          temp[firstSquareupperBtnIndex].allClicked = true;
+          temp[secondSquareupperBtnIndex].active = true;
+          temp[firstSquareupperBtnIndex].active = true;
           for (let i = 0; i < temp.length; i++) {
-            if (i !== id && i !== id - state.col) {
+            if (i !== secondSquareupperBtnIndex && i !== firstSquareupperBtnIndex) {
               temp[i].active = false;
             }
           }
           if (state.player === "1") {
-            temp[id].squarecolor = "red";
-            temp[id - state.col].squarecolor = "red";
+            temp[secondSquareupperBtnIndex].squarecolor = "red";
+            temp[firstSquareupperBtnIndex].squarecolor = "red";
           } else {
-            temp[id].squarecolor = "green";
-            temp[id - state.col].squarecolor = "green";
+            temp[secondSquareupperBtnIndex].squarecolor = "green";
+            temp[firstSquareupperBtnIndex].squarecolor = "green";
           }
           const player = `player${state.player}Score`;
           const playerScore = state[player];
@@ -319,255 +337,6 @@ function Contexts(props) {
           return;
         }
       }
-    } else {
-      if (id % (state.col + 1) === 0) {
-        //first column left vertical btn id provided
-        if (
-          state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id - Math.floor(id / (state.col + 1)) + state.col
-          ].isClicked &&
-          state.verticalButtons[id].isClicked &&
-          state.verticalButtons[id + 1].isClicked
-        ) {
-          let temp = [...state.squaresColors];
-          temp[id - Math.floor(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.floor(id / (state.col + 1))].active = true;
-          for (let i = 0; i < temp.length; i++) {
-            if (i !== id - Math.floor(id / (state.col + 1))) {
-              temp[i].active = false;
-            }
-          }
-          if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
-          } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
-          }
-          audio3.play();
-          const player = `player${state.player}Score`;
-          const playerScore = state[player];
-          const noOfSquares = state.numberOfSquares;
-          dispatch({
-            type: "SetStates",
-            payload: {
-              [player]: state[player] + 1,
-              squaresColors: temp,
-              numberOfSquares: state.numberOfSquares + 1,
-            },
-          });
-          if (state.playerEnteredRoom)
-            updateDocState({
-              [player]: playerScore + 1,
-              squaresColors: temp,
-              numberOfSquares: noOfSquares + 1,
-            });
-          return;  
-        }
-      } else if (id % (state.col + 1) === state.col) {
-        //last column right vertical btn id provided
-        if (
-          state.horizontalButtons[id - Math.ceil(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id + state.col - Math.ceil(id / (state.col + 1))
-          ].isClicked &&
-          state.verticalButtons[id - 1].isClicked &&
-          state.verticalButtons[id].isClicked
-        ) {
-          let temp = [...state.squaresColors];
-          temp[id - Math.ceil(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.ceil(id / (state.col + 1))].active = true;
-          for (let i = 0; i < temp.length; i++) {
-            if (i !== id - Math.ceil(id / (state.col + 1))) {
-              temp[i].active = false;
-            }
-          }
-          if (state.player === "1") {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
-          } else {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
-          }
-          audio3.play();
-          const player = `player${state.player}Score`;
-          const playerScore = state[player];
-          const noOfSquares = state.numberOfSquares;
-          dispatch({
-            type: "SetStates",
-            payload: {
-              [player]: state[player] + 1,
-              squaresColors: temp,
-              numberOfSquares: state.numberOfSquares + 1,
-            },
-          });
-          if (state.playerEnteredRoom)
-            updateDocState({
-              [player]: playerScore + 1,
-              squaresColors: temp,
-              numberOfSquares: noOfSquares + 1,
-            });
-          return;  
-        }
-      } else {
-        //middle column (not first and not last) btn id provided
-        if (
-          state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id + state.col - Math.floor(id / (state.col + 1))
-          ].isClicked &&
-          state.verticalButtons[id].isClicked &&
-          state.verticalButtons[id + 1].isClicked &&
-          (!state.horizontalButtons[id - Math.ceil(id / (state.col + 1))]
-            .isClicked ||
-            !state.horizontalButtons[
-              id + state.col - Math.ceil(id / (state.col + 1))
-            ].isClicked ||
-            !state.verticalButtons[id - 1].isClicked ||
-            !state.verticalButtons[id].isClicked)
-        ) {
-          //first row upper btn id provided
-          let temp = [...state.squaresColors];
-          temp[id - Math.floor(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.floor(id / (state.col + 1))].active = true;
-          for (let i = 0; i < temp.length; i++) {
-            if (i !== id - Math.floor(id / (state.col + 1))) {
-              temp[i].active = false;
-            }
-          }
-          if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
-          } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
-          }
-          audio3.play();
-          const player = `player${state.player}Score`;
-          const playerScore = state[player];
-          const noOfSquares = state.numberOfSquares;
-          dispatch({
-            type: "SetStates",
-            payload: {
-              [player]: state[player] + 1,
-              squaresColors: temp,
-              numberOfSquares: state.numberOfSquares + 1,
-            },
-          });
-          if (state.playerEnteredRoom)
-            updateDocState({
-              [player]: playerScore + 1,
-              squaresColors: temp,
-              numberOfSquares: noOfSquares + 1,
-            });
-
-          return;  
-        } else if (
-          (!state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
-            .isClicked ||
-            !state.horizontalButtons[
-              id + state.col - Math.floor(id / (state.col + 1))
-            ].isClicked ||
-            !state.verticalButtons[id].isClicked ||
-            !state.verticalButtons[id + 1].isClicked) &&
-          state.horizontalButtons[id - Math.ceil(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id + state.col - Math.ceil(id / (state.col + 1))
-          ].isClicked &&
-          state.verticalButtons[id - 1].isClicked &&
-          state.verticalButtons[id].isClicked
-        ) {
-          //last row lower btn id provided
-          let temp = [...state.squaresColors];
-          temp[id - Math.ceil(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.ceil(id / (state.col + 1))].active = true;
-          for (let i = 0; i < temp.length; i++) {
-            if (i !== id - Math.ceil(id / (state.col + 1))) {
-              temp[i].active = false;
-            }
-          }
-          if (state.player === "1") {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
-          } else {
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
-          }
-          audio3.play();
-          const player = `player${state.player}Score`;
-          const playerScore = state[player];
-          const noOfSquares = state.numberOfSquares;
-          dispatch({
-            type: "SetStates",
-            payload: {
-              [player]: state[player] + 1,
-              squaresColors: temp,
-              numberOfSquares: state.numberOfSquares + 1,
-            },
-          });
-          if (state.playerEnteredRoom)
-            updateDocState({
-              [player]: playerScore + 1,
-              squaresColors: temp,
-              numberOfSquares: noOfSquares + 1,
-            });
-          return;  
-        } else if (
-          state.horizontalButtons[id - Math.floor(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id + state.col - Math.floor(id / (state.col + 1))
-          ].isClicked &&
-          state.verticalButtons[id].isClicked &&
-          state.verticalButtons[id + 1].isClicked &&
-          state.horizontalButtons[id - Math.ceil(id / (state.col + 1))]
-            .isClicked &&
-          state.horizontalButtons[
-            id + state.col - Math.ceil(id / (state.col + 1))
-          ].isClicked &&
-          state.verticalButtons[id - 1].isClicked &&
-          state.verticalButtons[id].isClicked
-        ) {
-          //middle row (not first and not last) btn id provided
-          let temp = [...state.squaresColors];
-          temp[id - Math.floor(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.ceil(id / (state.col + 1))].allClicked = true;
-          temp[id - Math.floor(id / (state.col + 1))].active = true;
-          temp[id - Math.ceil(id / (state.col + 1))].active = true;
-          for (let i = 0; i < temp.length; i++) {
-            if (
-              i !== id - Math.floor(id / (state.col + 1)) &&
-              i !== id - Math.ceil(id / (state.col + 1))
-            ) {
-              temp[i].active = false;
-            }
-          }
-          if (state.player === "1") {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "red";
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "red";
-          } else {
-            temp[id - Math.floor(id / (state.col + 1))].squarecolor = "green";
-            temp[id - Math.ceil(id / (state.col + 1))].squarecolor = "green";
-          }
-          audio3.play();
-          const player = `player${state.player}Score`;
-          const playerScore = state[player];
-          const noOfSquares = state.numberOfSquares;
-          dispatch({
-            type: "SetStates",
-            payload: {
-              [player]: state[player] + 2,
-              squaresColors: temp,
-              numberOfSquares: state.numberOfSquares + 2,
-            },
-          });
-          if (state.playerEnteredRoom)
-            updateDocState({
-              [player]: playerScore + 2,
-              squaresColors: temp,
-              numberOfSquares: noOfSquares + 2,
-            });
-          return;  
-        }
-      }
-    }
     const playerChance = state.player === "1" ? "2" : "1";
     dispatch({
       type: "SetStates",
