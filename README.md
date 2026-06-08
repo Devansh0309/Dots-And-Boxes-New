@@ -21,7 +21,7 @@
 <div>- Rows of grid except last row is made up of oneboxes in order from left to right</div>
 <div>- Last column of each row except last row is made up of twoboxes which contains dot + right vertical button</div>
 <div>- Last row is made up of twoboxes which contains dot + lower button</div>
-<div>- Last element of grid a dot</div>
+<div>- Last element of grid is a dot</div>
 
 <p>Grid is rendered using Boxes array which has oneboxes, twoboxes, dot as box items. There are separate arrays for innerboxes or squares inside onebox, horizontal buttons for lower, upper buttons, and vertical buttons for left and right vertical btns</p>
 
@@ -45,9 +45,3 @@
 <li>S.I. = Box-index - floor(Box-index/(c+1))= U.B.I.</li>
 <li>L.B.I. = Box-index - floor(Box-index/(c+1)) + c</li>
 </ul>
-
-
-
-
-
-
